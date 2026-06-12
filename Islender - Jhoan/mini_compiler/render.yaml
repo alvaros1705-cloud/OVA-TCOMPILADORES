@@ -1,0 +1,13 @@
+# Despliegue API-only en Render.com (frontend estático en GitHub Pages)
+# Desarrollo local: cd backend && uvicorn main:app --reload --host 127.0.0.1 --port 8002
+services:
+  - type: web
+    name: mini-compilador
+    runtime: python
+    rootDir: .
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
