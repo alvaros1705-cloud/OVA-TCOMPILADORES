@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portal Académico de Objetos Virtuales de Aprendizaje (OVAS) para la asignatura Teoría de Compiladores de la Universidad Simón Bolívar - Sede Cúcuta.">
+  <title>Portal Académico OVAS - Teoría de Compiladores | USB</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
+  <!-- Hoja de Estilos Consolidada -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Barra de Navegación Superior Institucional -->
+  <header class="portal-header">
+    <div class="header-left">
+      <button class="hamburger-btn" id="hamburger-toggle" aria-label="Abrir menú de navegación" aria-controls="sidebar">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+      </button>
+      <div class="logo-container">
+        <!-- Logo Institucional Real de la USB -->
+        <img src="assets/img/logo-simonbolivar.png" alt="Logo Universidad Simón Bolívar" class="header-logo">
+        <div class="logo-text">
+          <span class="logo-title">TEORÍA DE COMPILADORES</span>
+          <span class="logo-subtitle">Portal Integrado de Objetos Virtuales de Aprendizaje</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <div class="institutional-badge">
+        <div class="usb-text">
+          <span class="usb-name">Universidad Simón Bolívar</span>
+          <span class="usb-sub">Programa de Ingeniería de Sistemas</span>
+          <span class="usb-campus">Campus Cúcuta</span>
+        </div>
+      </div>
+      <!-- Botón de Cambio de Tema -->
+      <button class="theme-toggle-btn" id="theme-toggle" aria-label="Cambiar tema de color">
+        <svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+        <svg class="icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="portal-container">
+    
+    <!-- Menú Hamburguesa Lateral (Sidebar) -->
+    <aside class="sidebar" id="sidebar" aria-hidden="true">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">Menú Principal</h2>
+        <button class="close-sidebar-btn" id="sidebar-close" aria-label="Cerrar menú de navegación">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Buscador de OVAS -->
+      <div class="search-box">
+        <label for="ova-search" class="visually-hidden">Buscar OVAS</label>
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="search" id="ova-search" placeholder="Buscar por tema o autor..." aria-label="Buscar OVAS">
+        </div>
+      </div>
+
+      <!-- Lista de Enlaces a las OVAS -->
+      <nav class="sidebar-nav" aria-label="Navegación de OVAS">
+        <ul class="nav-list">
+          <li>
+            <a href="#/" class="nav-item active" id="nav-home">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span>Inicio / Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-divider">Etapas de Compilación</li>
+          <li>
+            <a href="#/ova/analizador-lexico" class="nav-item" id="nav-ova-1">
+              <span class="ova-num">01</span>
+              <div class="ova-info">
+                <span class="ova-title">Analizador Léxico</span>
+                <span class="ova-author">Marco & Cristian</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#/ova/analizador-sintactico" class="nav-item" id="nav-ova-2">
+              <span class="ova-num">02</span>
+              <div class="ova-info">
+                <span class="ova-title">Analizador Sintáctico</span>
+                <span class="ova-author">Fabian & Sofi</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#/ova/analizador-semantico" class="nav-item" id="nav-ova-3">
+              <span class="ova-num">03</span>
+              <div class="ova-info">
+                <span class="ova-title">Analizador Semántico</span>
+                <span class="ova-author">Kevin & Gabriel</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#/ova/mini-compilador" class="nav-item" id="nav-ova-4">
+              <span class="ova-num">04</span>
+              <div class="ova-info">
+                <span class="ova-title">Mini Compilador (TAC)</span>
+                <span class="ova-author">Islender & Jhoan</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#/ova/simulador-automatas" class="nav-item" id="nav-ova-5">
+              <span class="ova-num">05</span>
+              <div class="ova-info">
+                <span class="ova-title">Simulador Autómatas</span>
+                <span class="ova-author">Ronald & Johel</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Panel de Ajustes Rápidos en la Sidebar -->
+      <div class="sidebar-footer">
+        <button class="settings-btn" id="open-settings" aria-label="Configurar URLs del servidor">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Configurar Servidores</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Overlay de Sidebar en móviles -->
+    <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+    <!-- Área Principal de Contenido (Dashboard + Visor Iframe) -->
+    <main class="main-content" id="main-content">
+      
+      <!-- VISTA 1: DASHBOARD PRINCIPAL -->
+      <section class="dashboard-view" id="dashboard-view">
+        
+        <!-- Hero Principal Académico -->
+        <header class="hero-section">
+          <div class="hero-content">
+            <h1 class="hero-title">TEORÍA DE COMPILADORES</h1>
+            <h2 class="hero-subtitle">Programa de Ingeniería de Sistemas</h2>
+            <h3 class="hero-institution">Universidad Simón Bolívar</h3>
+            <p class="hero-tagline">Repositorio Integrado de Objetos Virtuales de Aprendizaje desarrollados por estudiantes de la asignatura Teoría de Compiladores.</p>
+            <div class="hero-actions">
+              <a href="#ovas-grid-anchor" class="btn-hero-primary" id="btn-explore">Explorar OVAS</a>
+              <button class="btn-hero-secondary" id="btn-about-project">Conocer Proyecto</button>
+            </div>
+          </div>
+          <!-- Logo del programa de Ingeniería de Sistemas real -->
+          <div class="hero-logo-wrapper">
+            <img src="assets/img/logo-sistemas.png" alt="Logo Ingeniería de Sistemas USB" class="hero-logo">
+          </div>
+        </header>
+
+        <!-- Nueva Sección: Indicadores Académicos (Dashboard) -->
+        <section class="indicators-section">
+          <div class="indicators-grid">
+            <div class="indicator-card">
+              <div class="indicator-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+              <div class="indicator-info">
+                <span class="indicator-count">5</span>
+                <span class="indicator-label">OVAS Integradas</span>
+              </div>
+            </div>
+            
+            <div class="indicator-card">
+              <div class="indicator-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <div class="indicator-info">
+                <span class="indicator-count">5</span>
+                <span class="indicator-label">Equipos de Trabajo</span>
+              </div>
+            </div>
+
+            <div class="indicator-card">
+              <div class="indicator-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5v-15z"></path>
+                </svg>
+              </div>
+              <div class="indicator-info">
+                <span class="indicator-count">5</span>
+                <span class="indicator-label">Temáticas Cubiertas</span>
+              </div>
+            </div>
+
+            <div class="indicator-card">
+              <div class="indicator-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                  <rect x="9" y="9" width="6" height="6"></rect>
+                  <line x1="9" y1="1" x2="9" y2="4"></line>
+                  <line x1="15" y1="1" x2="15" y2="4"></line>
+                  <line x1="9" y1="20" x2="9" y2="23"></line>
+                  <line x1="15" y1="20" x2="15" y2="23"></line>
+                  <line x1="20" y1="9" x2="23" y2="9"></line>
+                  <line x1="20" y1="15" x2="23" y2="15"></line>
+                  <line x1="1" y1="9" x2="4" y2="9"></line>
+                  <line x1="1" y1="15" x2="4" y2="15"></line>
+                </svg>
+              </div>
+              <div class="indicator-info">
+                <span class="indicator-count">10+</span>
+                <span class="indicator-label">Tecnologías Utilizadas</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección de Tarjetas de las 5 OVAS -->
+        <span id="ovas-grid-anchor"></span>
+        <section class="ovas-section">
+          <div class="section-header">
+            <h2 class="section-title">Objetos Virtuales de Aprendizaje</h2>
+            <p class="section-subtitle">Selecciona una etapa del proceso de compilación para interactuar con la simulación.</p>
+          </div>
+
+          <div class="ovas-grid" id="ovas-grid">
+            
+            <!-- Tarjeta OVA 01: Analizador Léxico -->
+            <article class="ova-card" data-title="analizador lexico lexer marco cristian" id="card-ova-1">
+              <div class="card-badge">Fase 1: Léxico</div>
+              <div class="card-body">
+                <span class="card-number">01</span>
+                <h3 class="card-title">Analizador Léxico</h3>
+                <p class="card-desc">Simulador que analiza y descompone código fuente MiniC en una secuencia de tokens, clasificándolos en identificadores, palabras clave y operadores.</p>
+                <div class="card-meta">
+                  <div class="card-author-group">
+                    <span class="meta-label">Autores:</span>
+                    <span class="card-author">Marco & Cristian</span>
+                  </div>
+                  <span class="card-badge-static">Cliente Estático</span>
+                </div>
+              </div>
+              <div class="card-actions-row">
+                <a href="#/ova/analizador-lexico" class="btn-card-primary">Abrir OVA</a>
+                <button class="btn-card-secondary" data-ova="analizador-lexico">Información</button>
+              </div>
+            </article>
+
+            <!-- Tarjeta OVA 02: Analizador Sintáctico -->
+            <article class="ova-card" data-title="analizador sintactico parser fabian sofi" id="card-ova-2">
+              <div class="card-badge">Fase 2: Sintaxis</div>
+              <div class="card-body">
+                <span class="card-number">02</span>
+                <h3 class="card-title">Analizador Sintáctico</h3>
+                <p class="card-desc">Valida la gramática formal y construye árboles de sintaxis abstracta (AST) a partir de un flujo de tokens, permitiendo visualizar la jerarquía.</p>
+                <div class="card-meta">
+                  <div class="card-author-group">
+                    <span class="meta-label">Autores:</span>
+                    <span class="card-author">Fabian & Sofi</span>
+                  </div>
+                  <span class="card-badge-api">Requiere API</span>
+                </div>
+              </div>
+              <div class="card-actions-row">
+                <a href="#/ova/analizador-sintactico" class="btn-card-primary">Abrir OVA</a>
+                <button class="btn-card-secondary" data-ova="analizador-sintactico">Información</button>
+              </div>
+            </article>
+
+            <!-- Tarjeta OVA 03: Analizador Semántico -->
+            <article class="ova-card" data-title="analizador semantico validador kevin gabriel" id="card-ova-3">
+              <div class="card-badge">Fase 3: Semántica</div>
+              <div class="card-body">
+                <span class="card-number">03</span>
+                <h3 class="card-title">Analizador Semántico</h3>
+                <p class="card-desc">Valida la coherencia lógica de las declaraciones de tipos, verificación de ámbitos, compatibilidad de operadores y funciones.</p>
+                <div class="card-meta">
+                  <div class="card-author-group">
+                    <span class="meta-label">Autores:</span>
+                    <span class="card-author">Kevin & Gabriel</span>
+                  </div>
+                  <span class="card-badge-static">Cliente Estático</span>
+                </div>
+              </div>
+              <div class="card-actions-row">
+                <a href="#/ova/analizador-semantico" class="btn-card-primary">Abrir OVA</a>
+                <button class="btn-card-secondary" data-ova="analizador-semantico">Información</button>
+              </div>
+            </article>
+
+            <!-- Tarjeta OVA 04: Mini Compilador (TAC) -->
+            <article class="ova-card" data-title="mini compilador tres direcciones tac islender jhoan" id="card-ova-4">
+              <div class="card-badge">Fase 4: Código Intermedio</div>
+              <div class="card-body">
+                <span class="card-number">04</span>
+                <h3 class="card-title">Mini Compilador (TAC)</h3>
+                <p class="card-desc">Realiza el proceso completo de análisis y genera la representación de Código de Tres Direcciones (TAC) estructurado en cuádruplas.</p>
+                <div class="card-meta">
+                  <div class="card-author-group">
+                    <span class="meta-label">Autores:</span>
+                    <span class="card-author">Islender & Jhoan</span>
+                  </div>
+                  <span class="card-badge-api">Requiere API</span>
+                </div>
+              </div>
+              <div class="card-actions-row">
+                <a href="#/ova/mini-compilador" class="btn-card-primary">Abrir OVA</a>
+                <button class="btn-card-secondary" data-ova="mini-compilador">Información</button>
+              </div>
+            </article>
+
+            <!-- Tarjeta OVA 05: Simulador de Autómatas (FASS) -->
+            <article class="ova-card" data-title="simulador de automatas fass afd afn ronald johel" id="card-ova-5">
+              <div class="card-badge">Fundamento: Autómatas</div>
+              <div class="card-body">
+                <span class="card-number">05</span>
+                <h3 class="card-title">Simulador Autómatas</h3>
+                <p class="card-desc">Diseño gráfico interactivo y validación de cadenas en Autómatas Finitos Deterministas (AFD) y No Deterministas (AFN) para base léxica.</p>
+                <div class="card-meta">
+                  <div class="card-author-group">
+                    <span class="meta-label">Autores:</span>
+                    <span class="card-author">Ronald & Johel</span>
+                  </div>
+                  <span class="card-badge-hybrid">Híbrido (Offline)</span>
+                </div>
+              </div>
+              <div class="card-actions-row">
+                <a href="#/ova/simulador-automatas" class="btn-card-primary">Abrir OVA</a>
+                <button class="btn-card-secondary" data-ova="simulador-automatas">Información</button>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- Sección: Centro de Aprendizaje (Fase 14) -->
+        <section class="learning-section" id="learning-section">
+          <div class="section-header learning-section-head">
+            <div>
+              <h2 class="section-title">Centro de Aprendizaje</h2>
+              <p class="section-subtitle">Guías, ejemplos resueltos, quices y juegos educativos de Teoría de Compiladores.</p>
+            </div>
+            <aside class="learning-progress-panel" id="learning-progress-stats" aria-label="Estadísticas de progreso"></aside>
+          </div>
+
+          <div class="learning-grid">
+            <article class="learning-card" id="card-learning-guide">
+              <div class="learning-card-icon">📖</div>
+              <h3 class="learning-card-title">Guía de las OVAs</h3>
+              <p class="learning-card-desc">Tabs interactivos por OVA: objetivos, tokens, AST, semántica, TAC y autómatas con acordeones académicos.</p>
+              <button type="button" class="btn-card-primary learning-open-btn" data-learning-open="learning-guide-modal" data-learning-init="initGuide">Abrir guía</button>
+            </article>
+
+            <article class="learning-card" id="card-learning-examples">
+              <div class="learning-card-icon">📚</div>
+              <h3 class="learning-card-title">Ejemplos Resueltos</h3>
+              <p class="learning-card-desc">Galería de 10 casos: variables, operadores, control, errores léxico/sintaxis/semántica y generación TAC.</p>
+              <button type="button" class="btn-card-primary learning-open-btn" data-learning-open="learning-examples-modal" data-learning-init="initExamples">Ver ejemplos</button>
+            </article>
+
+            <article class="learning-card" id="card-learning-quiz">
+              <div class="learning-card-icon">📝</div>
+              <h3 class="learning-card-title">Quiz Interactivo</h3>
+              <p class="learning-card-desc">20 preguntas (4 por área). Retroalimentación inmediata, barra de progreso y nivel Principiante / Intermedio / Avanzado.</p>
+              <button type="button" class="btn-card-primary learning-open-btn" data-learning-open="learning-quiz-modal" data-learning-init="initQuiz">Iniciar quiz</button>
+            </article>
+
+            <article class="learning-card" id="card-learning-hangman">
+              <div class="learning-card-icon">🎯</div>
+              <h3 class="learning-card-title">Juego del Ahorcado</h3>
+              <p class="learning-card-desc">Adivina términos del compilador: TOKEN, PARSER, AST, AFD, cuádruplas y más. 6 intentos, teclado virtual.</p>
+              <button type="button" class="btn-card-primary learning-open-btn" data-learning-open="learning-hangman-modal" data-learning-init="initHangman">Jugar</button>
+            </article>
+
+            <article class="learning-card" id="card-learning-wordsearch">
+              <div class="learning-card-icon">🔤</div>
+              <h3 class="learning-card-title">Sopa de Letras</h3>
+              <p class="learning-card-desc">Cuadrícula 12×12 con 15 conceptos. Selección visual, resaltado y lista de palabras encontradas.</p>
+              <button type="button" class="btn-card-primary learning-open-btn" data-learning-open="learning-wordsearch-modal" data-learning-init="initWordSearch">Jugar</button>
+            </article>
+
+            <article class="learning-card" id="card-learning-matching">
+              <div class="learning-card-icon">🔗</div>
+              <h3 class="learning-card-title">Apareamiento</h3>
+              <p class="learning-card-desc">Relaciona TOKEN, AST, AFD, PARSER, TAC y más con sus definiciones. Drag and drop con puntaje.</p>
+              <button type="button" class="btn-card-primary learning-open-btn" data-learning-open="learning-matching-modal" data-learning-init="initMatching">Jugar</button>
+            </article>
+          </div>
+        </section>
+
+        <!-- Nueva Sección: Docente Asesor -->
+        <section class="advisor-section">
+          <div class="advisor-card">
+            <div class="advisor-visual">
+              <div class="advisor-badge">
+                <span class="advisor-initials">AS</span>
+              </div>
+            </div>
+            <div class="advisor-content">
+              <span class="advisor-tag">Dirección y Asesoría Académica</span>
+              <h2 class="advisor-name">Alvaro Salamanca Landínez</h2>
+              <ul class="advisor-details">
+                <li>Ingeniero de Sistemas • Ingeniero Civil</li>
+                <li>Especialista en Informática Educativa</li>
+                <li>Magíster en Educación Matemática</li>
+                <li>Docente Investigador</li>
+              </ul>
+              <span class="advisor-institution">Universidad Simón Bolívar</span>
+            </div>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- VISTA 2: VISOR DE OVAS (Cargado dinámicamente) -->
+      <section class="ova-viewer-view" id="ova-viewer-view" style="display: none;">
+        <div class="viewer-header">
+          <div class="viewer-nav">
+            <a href="#/" class="btn-back" id="btn-back-dashboard">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>Volver</span>
+            </a>
+            <div class="viewer-title-group">
+              <h1 class="viewer-title" id="active-ova-title">Nombre de la OVA Seleccionada</h1>
+              <span class="viewer-author" id="active-ova-author">Por Autores</span>
+            </div>
+          </div>
+          <div class="viewer-controls">
+            <!-- Botón para recargar el iframe -->
+            <button class="btn-control" id="btn-reload-ova" aria-label="Reiniciar simulación">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              <span>Recargar</span>
+            </button>
+            <!-- Enlace para abrir la OVA en una pestaña independiente -->
+            <a href="#" target="_blank" class="btn-control-link" id="btn-open-external" aria-label="Abrir en pestaña nueva">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"></path>
+              </svg>
+              <span>Externo</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Área Principal de Carga Dinámica Mediante IFrame -->
+        <div class="iframe-wrapper">
+          <!-- Loader de temática de compilador -->
+          <div class="iframe-loader" id="iframe-loader">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">
+              <span class="loader-main-text">Iniciando simulación...</span>
+              <span class="loader-sub-text" id="loader-status">Analizando flujo léxico</span>
+            </div>
+          </div>
+          <!-- Elemento IFrame -->
+          <iframe id="ova-iframe" name="ova-iframe" title="Contenedor de Objeto Virtual de Aprendizaje" sandbox="allow-scripts allow-same-origin allow-forms" src="about:blank"></iframe>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modal de Configuración de Servidores para API Backend -->
+  <dialog class="settings-modal" id="settings-dialog">
+    <div class="modal-header">
+      <h2 class="modal-title">Configuración de Servidores</h2>
+      <button class="close-modal-btn" id="close-settings" aria-label="Cerrar modal">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <form method="dialog" class="modal-form">
+      <p class="modal-intro">Configura las URLs de los servidores API si las simulaciones están desplegadas en la nube (ej. Render/FastAPI) o en desarrollo local.</p>
+      
+      <div class="form-group">
+        <label for="url-sintactico">API Analizador Sintáctico (Fabian - Sofi):</label>
+        <input type="url" id="url-sintactico" name="url-sintactico" placeholder="Default: http://localhost:8001" pattern="https?://.*">
+      </div>
+
+      <div class="form-group">
+        <label for="url-mini-compilador">API Mini Compilador (Islender - Jhoan):</label>
+        <input type="url" id="url-mini-compilador" name="url-mini-compilador" placeholder="Default: http://localhost:8002" pattern="https?://.*">
+      </div>
+
+      <div class="form-group">
+        <label for="url-automata">API Simulador Autómatas FASS (Ronald - Johel):</label>
+        <input type="url" id="url-automata" name="url-automata" placeholder="Default: http://localhost:5000" pattern="https?://.*">
+        <span class="help-text">Si está vacío, usará el motor local JavaScript offline de la OVA.</span>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="btn-reset-settings">Restablecer Defaults</button>
+        <button type="submit" class="btn-primary" id="btn-save-settings">Guardar Cambios</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modales Dinámicos de Información Detallada de OVAS -->
+  
+  <!-- Detalle OVA 1 -->
+  <dialog class="details-modal" id="details-ova-1-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Fase 1: Analizador Léxico</h2>
+      <button class="close-details-btn" data-close="details-ova-1-modal" aria-label="Cerrar modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h3>Detalles Académicos del Proyecto</h3>
+      <p>Este objeto de aprendizaje se enfoca en la primera fase de la compilación: el análisis léxico. Su objetivo es convertir un flujo de caracteres del código fuente (en sintaxis simplificada de MiniC) en un flujo de tokens válidos.</p>
+      <div class="tech-spec-table">
+        <div class="spec-row"><strong>Integrantes:</strong> <span>Marco & Cristian</span></div>
+        <div class="spec-row"><strong>Gramática/Temática:</strong> <span>Clasificación de palabras reservadas, identificadores, operadores y delimitadores mediante expresiones regulares.</span></div>
+        <div class="spec-row"><strong>Características UX:</strong> <span>Interfaz limpia con tabla de tokens, detección de errores léxicos en tiempo real y coloración sintáctica.</span></div>
+        <div class="spec-row"><strong>Tecnología:</strong> <span>HTML5 nativo, CSS3 puro y lógica en JavaScript cliente estático.</span></div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Detalle OVA 2 -->
+  <dialog class="details-modal" id="details-ova-2-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Fase 2: Analizador Sintáctico</h2>
+      <button class="close-details-btn" data-close="details-ova-2-modal" aria-label="Cerrar modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h3>Detalles Académicos del Proyecto</h3>
+      <p>Esta OVA valida la estructura jerárquica del código de acuerdo con las reglas de una gramática libre de contexto. Mapea la sintaxis y permite al estudiante visualizar la construcción del árbol sintáctico abstracto (AST).</p>
+      <div class="tech-spec-table">
+        <div class="spec-row"><strong>Integrantes:</strong> <span>Fabian & Sofi</span></div>
+        <div class="spec-row"><strong>Gramática/Temática:</strong> <span>Análisis sintáctico descendente/ascendente y representación visual de las dependencias jerárquicas del lenguaje.</span></div>
+        <div class="spec-row"><strong>Características UX:</strong> <span>Generación dinámica del árbol AST animado mediante D3.js, editor de código con panel de consola de errores sintácticos.</span></div>
+        <div class="spec-row"><strong>Tecnología:</strong> <span>JavaScript frontend, D3.js para graficado, API backend en Python (FastAPI).</span></div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Detalle OVA 3 -->
+  <dialog class="details-modal" id="details-ova-3-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Fase 3: Analizador Semántico</h2>
+      <button class="close-details-btn" data-close="details-ova-3-modal" aria-label="Cerrar modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h3>Detalles Académicos del Proyecto</h3>
+      <p>Valida las restricciones que no pueden expresarse mediante gramáticas libres de contexto, tales como la declaración previa de variables, compatibilidad de tipos en operaciones y la coherencia en el retorno de funciones.</p>
+      <div class="tech-spec-table">
+        <div class="spec-row"><strong>Integrantes:</strong> <span>Kevin & Gabriel</span></div>
+        <div class="spec-row"><strong>Gramática/Temática:</strong> <span>Chequeo estático de tipos, construcción de la tabla de símbolos y detección de inconsistencias de lógica computacional.</span></div>
+        <div class="spec-row"><strong>Características UX:</strong> <span>Paneles de advertencias semánticas con marcado de línea de código y visor detallado de tabla de símbolos de variables.</span></div>
+        <div class="spec-row"><strong>Tecnología:</strong> <span>JavaScript frontend, HTML5, CSS3, procesamiento completo en el lado del cliente (estático).</span></div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Detalle OVA 4 -->
+  <dialog class="details-modal" id="details-ova-4-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Fase 4: Código de Tres Direcciones (TAC)</h2>
+      <button class="close-details-btn" data-close="details-ova-4-modal" aria-label="Cerrar modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h3>Detalles Académicos del Proyecto</h3>
+      <p>Traduce la estructura jerárquica del AST en una secuencia de instrucciones lineales simplificadas (Código de Tres Direcciones) representadas formalmente mediante cuádruplas (operador, argumento 1, argumento 2, resultado).</p>
+      <div class="tech-spec-table">
+        <div class="spec-row"><strong>Integrantes:</strong> <span>Islender & Jhoan</span></div>
+        <div class="spec-row"><strong>Gramática/Temática:</strong> <span>Generación de variables temporales, traducción sintáctica de estructuras condicionales (If-Else) y bucles (While).</span></div>
+        <div class="spec-row"><strong>Características UX:</strong> <span>Visualización organizada de cuádruplas interactivas, editor con plantillas de prueba del lenguaje MiniC.</span></div>
+        <div class="spec-row"><strong>Tecnología:</strong> <span>Frontend dinámico en HTML5/JS, motor de compilador API backend en Python (FastAPI).</span></div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Detalle OVA 5 -->
+  <dialog class="details-modal" id="details-ova-5-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Fundamentos: Simulador Autómatas (FASS)</h2>
+      <button class="close-details-btn" data-close="details-ova-5-modal" aria-label="Cerrar modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h3>Detalles Académicos del Proyecto</h3>
+      <p>FASS es una herramienta visual para el diseño y simulación de Autómatas Finitos Deterministas (AFD) y No Deterministas (AFN), que componen el fundamento matemático en el que se basa el análisis léxico de los compiladores.</p>
+      <div class="tech-spec-table">
+        <div class="spec-row"><strong>Integrantes:</strong> <span>Ronald & Johel</span></div>
+        <div class="spec-row"><strong>Gramática/Temática:</strong> <span>Definición de estados iniciales y finales, transiciones por símbolo, transiciones vacías (épsilon) y simulación animada de paso de cadena.</span></div>
+        <div class="spec-row"><strong>Características UX:</strong> <span>Lienzo interactivo para arrastrar y conectar nodos, simulación animada paso a paso, historial e importación/exportación JSON.</span></div>
+        <div class="spec-row"><strong>Tecnología:</strong> <span>Vis.js para grafo interactivo, motor JS local para fallback, API Flask opcional para validaciones complejas.</span></div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal Conocer Proyecto -->
+  <dialog class="details-modal" id="project-about-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Acerca de la Plataforma de Compiladores</h2>
+      <button class="close-details-btn" data-close="project-about-modal" aria-label="Cerrar modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h3>Portal Académico Integrador de OVAS</h3>
+      <p>Esta plataforma ha sido desarrollada para servir como un entorno académico oficial y centralizado de los Objetos Virtuales de Aprendizaje (OVAs) de la asignatura <strong>Teoría de Compiladores</strong> de la <strong>Universidad Simón Bolívar (Sede Cúcuta)</strong>.</p>
+      <p>Cada una de las fases del compilador representa un esfuerzo conjunto de investigación, diseño de software y desarrollo técnico por parte de los estudiantes bajo la tutoría y dirección del docente del curso. La plataforma integra estas fases en un flujo secuencial interactivo que ayuda a los estudiantes de semestres venideros a asimilar de forma visual los conceptos abstractos de la ingeniería de lenguajes de programación.</p>
+      <p><strong>Objetivos de la plataforma:</strong></p>
+      <ul>
+        <li>Centralizar y preservar el software didáctico generado en la universidad.</li>
+        <li>Proveer simuladores interactivos listos para uso pedagógico en aulas de clase.</li>
+        <li>Fomentar la cultura de desarrollo de software, investigación e innovación tecnológica en el programa de Ingeniería de Sistemas.</li>
+      </ul>
+    </div>
+  </dialog>
+
+  <!-- ═══ CENTRO DE APRENDIZAJE — Modales Fase 14 ═══ -->
+
+  <dialog class="details-modal learning-modal" id="learning-guide-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">📖 Guía de las OVAs</h2>
+      <button type="button" class="close-details-btn" data-learning-close="learning-guide-modal" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body learning-modal-body" id="learning-guide-body"></div>
+  </dialog>
+
+  <dialog class="details-modal learning-modal learning-modal-wide" id="learning-examples-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">📚 Ejemplos Resueltos</h2>
+      <button type="button" class="close-details-btn" data-learning-close="learning-examples-modal" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body learning-modal-body learning-scroll" id="learning-examples-body"></div>
+  </dialog>
+
+  <dialog class="details-modal learning-modal" id="learning-quiz-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">📝 Quiz Interactivo</h2>
+      <button type="button" class="close-details-btn" data-learning-close="learning-quiz-modal" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body learning-modal-body">
+      <div id="learning-quiz-active">
+        <div class="learning-quiz-meta">
+          <span id="learning-quiz-progress">Pregunta 1 de 20</span>
+          <span class="learning-quiz-live">Puntaje: <strong id="learning-quiz-live-score">0</strong></span>
+          <div class="learning-progress-track"><div class="learning-progress-bar" id="learning-quiz-bar"></div></div>
+        </div>
+        <p class="learning-quiz-question" id="learning-quiz-question"></p>
+        <div class="learning-quiz-options" id="learning-quiz-options"></div>
+        <p class="learning-quiz-feedback" id="learning-quiz-feedback"></p>
+      </div>
+      <div id="learning-quiz-result" class="learning-quiz-result hidden">
+        <h3>Resultado final</h3>
+        <p class="learning-quiz-score" id="learning-quiz-score"></p>
+        <p class="learning-quiz-level" id="learning-quiz-level"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="details-modal learning-modal" id="learning-hangman-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">🎯 Juego del Ahorcado — Compiladores</h2>
+      <button type="button" class="close-details-btn" data-learning-close="learning-hangman-modal" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body learning-modal-body">
+      <div class="hangman-stats">
+        <span>Intentos fallidos: <strong id="hangman-wrong-count">0</strong> / 6</span>
+        <span>Aciertos sesión: <strong id="hangman-wins-count">0</strong></span>
+      </div>
+      <div class="hangman-display" id="hangman-word-display"></div>
+      <div class="hangman-keyboard" id="hangman-keyboard"></div>
+      <p class="learning-game-feedback" id="hangman-feedback"></p>
+      <button type="button" class="btn-card-secondary" id="hangman-reset-btn">Reiniciar</button>
+    </div>
+  </dialog>
+
+  <dialog class="details-modal learning-modal learning-modal-wide" id="learning-wordsearch-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">🔤 Sopa de Letras — 12×12</h2>
+      <button type="button" class="close-details-btn" data-learning-close="learning-wordsearch-modal" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body learning-modal-body learning-scroll">
+      <p class="learning-pipeline-hint">Arrastra o selecciona letras en línea recta para marcar cada palabra.</p>
+      <div class="wordsearch-layout">
+        <div class="wordsearch-grid" id="wordsearch-grid"></div>
+        <div class="wordsearch-words" id="wordsearch-word-list"></div>
+      </div>
+      <p class="learning-game-feedback" id="wordsearch-feedback"></p>
+      <button type="button" class="btn-card-secondary" id="wordsearch-reset-btn">Reiniciar</button>
+    </div>
+  </dialog>
+
+  <dialog class="details-modal learning-modal learning-modal-wide" id="learning-matching-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">🔗 Apareamiento de Conceptos</h2>
+      <button type="button" class="close-details-btn" data-learning-close="learning-matching-modal" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body learning-modal-body learning-scroll">
+      <p class="learning-game-score">Puntaje: <strong id="matching-score">0</strong> / 10</p>
+      <div class="matching-layout">
+        <div class="matching-pool" id="matching-pool"></div>
+        <div class="matching-targets" id="matching-targets"></div>
+      </div>
+      <p class="learning-game-feedback" id="matching-feedback"></p>
+      <button type="button" class="btn-card-secondary" id="matching-reset-btn">Reiniciar</button>
+    </div>
+  </dialog>
+
+  <!-- Footer Institucional Rediseñado -->
+  <footer class="portal-footer">
+    <div class="footer-grid">
+      <div class="footer-logo-col">
+        <img src="assets/img/logo-simonbolivar.png" alt="Universidad Simón Bolívar" class="footer-logo">
+      </div>
+      <div class="footer-info-col">
+        <span class="footer-title">UNIVERSIDAD SIMÓN BOLÍVAR</span>
+        <span class="footer-item">Facultad de Ingeniería</span>
+        <span class="footer-item">Programa de Ingeniería de Sistemas</span>
+        <span class="footer-item">Asignatura: Teoría de Compiladores</span>
+      </div>
+      <div class="footer-meta-col">
+        <span class="footer-portal-title">Portal Académico de OVAS</span>
+        <span class="footer-version">Versión Institucional 2.0</span>
+        <span class="footer-copyright">© <span id="current-year">2026</span> USB Cúcuta.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Archivos JavaScript — Centro de Aprendizaje + Portal -->
+  <script src="js/learning-data.js"></script>
+  <script src="js/learning-hub.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+﻿=== OVAS DIRECTORY INSPECTION ===
+Date: 06/11/2026 15:37:16
+
+----------------------------------------
+Item: Fabian - Sofi (Type: Directory)
+  Files count: 30
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+----------------------------------------
+Item: Islender - Jhoan (Type: Directory)
+  Files count: 3
+  - 
+  - 
+    [ZIP Archive Contents]:
+      * mini_compiler/
+      * mini_compiler/Makefile
+      * mini_compiler/pytest.ini
+      * mini_compiler/frontend/
+      * mini_compiler/frontend/static/
+      * mini_compiler/frontend/static/images/
+      * mini_compiler/frontend/static/css/
+      * mini_compiler/frontend/static/css/tokens.css
+      * mini_compiler/frontend/static/css/results.css
+      * mini_compiler/frontend/static/css/editor.css
+      * mini_compiler/frontend/static/css/main.css
+      * mini_compiler/frontend/static/css/ast.css
+      * mini_compiler/frontend/static/js/
+      * mini_compiler/frontend/static/js/results.js
+      * mini_compiler/frontend/static/js/ui.js
+      * mini_compiler/frontend/static/js/token_table.js
+      * mini_compiler/frontend/static/js/editor.js
+      * mini_compiler/frontend/static/js/api.js
+      * mini_compiler/frontend/static/js/ast_viewer.js
+      * mini_compiler/frontend/static/js/compiler_controls.js
+      * ... and 236 more files
+  - 
+----------------------------------------
+Item: Kevin - Gabriel (Type: Directory)
+  Files count: 1
+  - 
+    [ZIP Archive Contents]:
+      * compilador-semantico-web-main/.gitignore
+      * compilador-semantico-web-main/CHANGELOG.md
+      * compilador-semantico-web-main/Dockerfile
+      * compilador-semantico-web-main/LICENSE
+      * compilador-semantico-web-main/README.md
+      * compilador-semantico-web-main/analyzer.js
+      * compilador-semantico-web-main/apple-touch-icon.png
+      * compilador-semantico-web-main/docker-compose.yml
+      * compilador-semantico-web-main/favicon.ico
+      * compilador-semantico-web-main/favicon.png
+      * compilador-semantico-web-main/favicon.svg
+      * compilador-semantico-web-main/index.html
+      * compilador-semantico-web-main/site.webmanifest
+      * compilador-semantico-web-main/social-preview.png
+      * compilador-semantico-web-main/social-preview.svg
+      * compilador-semantico-web-main/styles.css
+      * compilador-semantico-web-main/PRIVACY_CHECKLIST.md
+      * compilador-semantico-web-main/assets/
+      * compilador-semantico-web-main/docs/
+      * compilador-semantico-web-main/.github/
+      * ... and 17 more files
+----------------------------------------
+Item: Marco - Cristian (Type: Directory)
+  Files count: 2
+  - 
+  - 
+----------------------------------------
+Item: Ronald - Johel (Type: Directory)
+  Files count: 103
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+    [ZIP Archive Contents]:
+      * mini_compiler/
+      * mini_compiler/Makefile
+      * mini_compiler/pytest.ini
+      * mini_compiler/frontend/
+      * mini_compiler/frontend/static/
+      * mini_compiler/frontend/static/images/
+      * mini_compiler/frontend/static/css/
+      * mini_compiler/frontend/static/css/tokens.css
+      * mini_compiler/frontend/static/css/results.css
+      * mini_compiler/frontend/static/css/editor.css
+      * mini_compiler/frontend/static/css/main.css
+      * mini_compiler/frontend/static/css/ast.css
+      * mini_compiler/frontend/static/js/
+      * mini_compiler/frontend/static/js/results.js
+      * mini_compiler/frontend/static/js/ui.js
+      * mini_compiler/frontend/static/js/token_table.js
+      * mini_compiler/frontend/static/js/editor.js
+      * mini_compiler/frontend/static/js/api.js
+      * mini_compiler/frontend/static/js/ast_viewer.js
+      * mini_compiler/frontend/static/js/compiler_controls.js
+      * ... and 236 more files
+  - 
+  - 
+    [ZIP Archive Contents]:
+      * compilador-semantico-web-main/.gitignore
+      * compilador-semantico-web-main/CHANGELOG.md
+      * compilador-semantico-web-main/Dockerfile
+      * compilador-semantico-web-main/LICENSE
+      * compilador-semantico-web-main/README.md
+      * compilador-semantico-web-main/analyzer.js
+      * compilador-semantico-web-main/apple-touch-icon.png
+      * compilador-semantico-web-main/docker-compose.yml
+      * compilador-semantico-web-main/favicon.ico
+      * compilador-semantico-web-main/favicon.png
+      * compilador-semantico-web-main/favicon.svg
+      * compilador-semantico-web-main/index.html
+      * compilador-semantico-web-main/site.webmanifest
+      * compilador-semantico-web-main/social-preview.png
+      * compilador-semantico-web-main/social-preview.svg
+      * compilador-semantico-web-main/styles.css
+      * compilador-semantico-web-main/PRIVACY_CHECKLIST.md
+      * compilador-semantico-web-main/assets/
+      * compilador-semantico-web-main/docs/
+      * compilador-semantico-web-main/.github/
+      * ... and 17 more files
+  - 
+  - 
+----------------------------------------
+Item: README.md (Type: File)
+  Size: 307 bytes
