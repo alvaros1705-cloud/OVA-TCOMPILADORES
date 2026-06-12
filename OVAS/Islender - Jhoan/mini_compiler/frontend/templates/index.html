@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiniCompilador</title>
+<style>
+  :root {
+    --bg: #0f1117; --surface: #1a1d2e; --surface2: #252840;
+    --accent: #7c6af7; --accent2: #5eead4;
+    --text: #e2e8f0; --text2: #94a3b8;
+    --green: #4ade80; --red: #f87171; --yellow: #fbbf24;
+    --border: #2d3154;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 1.2rem; font-weight: 700; color: var(--accent); }
+  header span { color: var(--text2); font-size: 0.85rem; }
+  .badge { background: var(--accent); color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+
+  .main { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
+
+  .editor-panel { display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+  .panel-header { background: var(--surface2); padding: 10px 16px; font-size: 0.8rem; color: var(--text2); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+  textarea#editor {
+    flex: 1; background: var(--surface); color: var(--text); border: none; outline: none;
+    padding: 16px; font-family: 'Courier New', monospace; font-size: 14px; resize: none;
+    line-height: 1.6; tab-size: 4;
+  }
+  .toolbar { background: var(--surface2); padding: 10px 16px; display: flex; gap: 10px; border-top: 1px solid var(--border); }
+  button {
+    padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer;
+    font-size: 0.85rem; font-weight: 600; transition: all .2s;
+  }
+  .btn-compile { background: var(--accent); color: #fff; }
+  .btn-compile:hover { background: #6454d4; }
+  .btn-clear { background: var(--surface); color: var(--text2); border: 1px solid var(--border); }
+  .btn-clear:hover { background: var(--surface2); }
+  .btn-example { background: transparent; color: var(--accent2); border: 1px solid var(--accent2); font-size: 0.78rem; padding: 6px 14px; }
+  .btn-example:hover { background: var(--accent2); color: var(--bg); }
+
+  .results-panel { display: flex; flex-direction: column; overflow: hidden; }
+  .tabs { display: flex; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .tab { padding: 10px 18px; font-size: 0.82rem; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent; transition: .2s; }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-content { flex: 1; overflow: auto; padding: 16px; display: none; }
+  .tab-content.active { display: block; }
+
+  /* Estado */
+  .status-bar { padding: 8px 16px; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .status-ok { background: rgba(74,222,128,.1); color: var(--green); }
+  .status-err { background: rgba(248,113,113,.1); color: var(--red); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  /* Tokens */
+  .token-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .token-table th { background: var(--surface2); color: var(--text2); padding: 8px 12px; text-align: left; position: sticky; top: 0; }
+  .token-table td { padding: 6px 12px; border-bottom: 1px solid var(--border); }
+  .token-table tr:hover td { background: var(--surface2); }
+  .token-type { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+  .tt-keyword { background: rgba(124,106,247,.2); color: var(--accent); }
+  .tt-literal { background: rgba(94,234,212,.2); color: var(--accent2); }
+  .tt-operator { background: rgba(251,191,36,.2); color: var(--yellow); }
+  .tt-identifier { background: rgba(74,222,128,.2); color: var(--green); }
+  .tt-delimiter { background: rgba(148,163,184,.15); color: var(--text2); }
+
+  /* Cuádruplas */
+  .quad-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; font-family: monospace; }
+  .quad-table th { background: var(--surface2); color: var(--text2); padding: 8px 12px; text-align: left; position: sticky; top: 0; }
+  .quad-table td { padding: 6px 12px; border-bottom: 1px solid var(--border); }
+  .quad-table tr:hover td { background: var(--surface2); }
+  .quad-idx { color: var(--text2); }
+  .quad-op { color: var(--accent); font-weight: 700; }
+  .quad-dash { color: var(--border); }
+
+  /* AST */
+  .ast-tree { font-family: monospace; font-size: 0.82rem; line-height: 1.8; white-space: pre; }
+  .ast-node { color: var(--accent); }
+  .ast-val { color: var(--accent2); }
+  .ast-leaf { color: var(--text2); }
+
+  /* Errores */
+  .error-list { display: flex; flex-direction: column; gap: 8px; }
+  .error-item { background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.3); border-radius: 6px; padding: 10px 14px; font-size: 0.85rem; color: var(--red); }
+  .no-errors { color: var(--green); text-align: center; padding: 40px; }
+
+  /* Tabla de símbolos */
+  .sym-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .sym-table th { background: var(--surface2); color: var(--text2); padding: 8px 12px; text-align: left; position: sticky; top: 0; }
+  .sym-table td { padding: 6px 12px; border-bottom: 1px solid var(--border); font-family: monospace; }
+  .sym-table tr:hover td { background: var(--surface2); }
+
+  .empty-state { color: var(--text2); text-align: center; padding: 60px 20px; }
+  .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚡ MiniCompilador</h1>
+  <span class="badge">MiniC v1.0</span>
+  <span>Lexer · Parser · Semántico · TAC</span>
+</header>
+
+<div class="main">
+  <!-- Editor -->
+  <div class="editor-panel">
+    <div class="panel-header">
+      <span>📝 Código fuente (.mc)</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn-example" onclick="loadExample('hello')">Hello World</button>
+        <button class="btn-example" onclick="loadExample('func')">Funciones</button>
+        <button class="btn-example" onclick="loadExample('ctrl')">Control</button>
+        <button class="btn-example" onclick="loadExample('err')">Error</button>
+      </div>
+    </div>
+    <textarea id="editor" spellcheck="false" placeholder="// Escribe tu código MiniC aquí
+// Tipos: int, float, string, bool
+// Estructuras: if/else, while, for
+// Funciones: func nombre(tipo param) : tipo { ... }
+// Salida: print(expr);
+
+print(&quot;Hola, mundo!&quot;);"></textarea>
+    <div class="toolbar">
+      <button class="btn-compile" onclick="compile()">▶ Compilar</button>
+      <button class="btn-clear" onclick="clearAll()">✕ Limpiar</button>
+    </div>
+  </div>
+
+  <!-- Resultados -->
+  <div class="results-panel">
+    <div id="status-bar" class="status-bar" style="display:none"></div>
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('tokens')">🔤 Tokens</div>
+      <div class="tab" onclick="showTab('quads')">📋 Cuádruplas</div>
+      <div class="tab" onclick="showTab('ast')">🌳 AST</div>
+      <div class="tab" onclick="showTab('symbols')">📚 Símbolos</div>
+      <div class="tab" onclick="showTab('errors')">⚠ Errores</div>
+    </div>
+    <div id="tab-tokens" class="tab-content active">
+      <div class="empty-state"><div class="icon">🔤</div><div>Compila para ver los tokens</div></div>
+    </div>
+    <div id="tab-quads" class="tab-content">
+      <div class="empty-state"><div class="icon">📋</div><div>Compila para ver las cuádruplas</div></div>
+    </div>
+    <div id="tab-ast" class="tab-content">
+      <div class="empty-state"><div class="icon">🌳</div><div>Compila para ver el AST</div></div>
+    </div>
+    <div id="tab-symbols" class="tab-content">
+      <div class="empty-state"><div class="icon">📚</div><div>Compila para ver la tabla de símbolos</div></div>
+    </div>
+    <div id="tab-errors" class="tab-content">
+      <div class="empty-state"><div class="icon">✅</div><div>Sin errores por ahora</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const EXAMPLES = {
+  hello: `// Hola Mundo\nprint("Hola, mundo!");`,
+  func: `func suma(int a, int b) : int {\n    return a + b;\n}\n\nint resultado = suma(10, 20);\nprint(resultado);`,
+  ctrl: `int x = 10;\n\nif (x > 5) {\n    print("x es mayor que 5");\n} else {\n    print("x es menor o igual");\n}\n\nint i = 0;\nwhile (i < 3) {\n    print(i);\n    i = i + 1;\n}`,
+  err: `// Error semántico: variable no declarada\nprint(variableNoDeclarada);`
+};
+
+function loadExample(key) {
+  document.getElementById('editor').value = EXAMPLES[key];
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const names = ['tokens','quads','ast','symbols','errors'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function clearAll() {
+  document.getElementById('editor').value = '';
+  const sb = document.getElementById('status-bar');
+  sb.style.display = 'none';
+  ['tokens','quads','ast','symbols','errors'].forEach(t => {
+    document.getElementById('tab-'+t).innerHTML = `<div class="empty-state"><div class="icon">⏳</div><div>Compila para ver resultados</div></div>`;
+  });
+}
+
+async function compile() {
+  const source = document.getElementById('editor').value.trim();
+  if (!source) return;
+  const btn = document.querySelector('.btn-compile');
+  btn.textContent = '⏳ Compilando...'; btn.disabled = true;
+
+  try {
+    const resp = await fetch('/compile', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({source})
+    });
+    const data = await resp.json();
+    renderResults(data);
+  } catch(e) {
+    renderError('Error de conexión: ' + e.message);
+  } finally {
+    btn.textContent = '▶ Compilar'; btn.disabled = false;
+  }
+}
+
+function renderResults(data) {
+  // Status
+  const sb = document.getElementById('status-bar');
+  sb.style.display = 'flex';
+  if (data.success) {
+    sb.className = 'status-bar status-ok';
+    sb.innerHTML = `<span class="dot" style="background:var(--green)"></span> Compilación exitosa — ${data.tokens.length} tokens · ${data.quadruples.length} cuádruplas`;
+  } else {
+    sb.className = 'status-bar status-err';
+    sb.innerHTML = `<span class="dot" style="background:var(--red)"></span> Errores encontrados (${data.errors.length})`;
+    showTab('errors');
+  }
+
+  // Tokens
+  const keywords = new Set(['INT','FLOAT_KW','STRING_KW','BOOL','IF','ELSE','WHILE','FOR','RETURN','FUNC','VOID','PRINT','TRUE','FALSE','BOOLEAN']);
+  const literals = new Set(['INTEGER','FLOAT','STRING','BOOLEAN']);
+  const operators = new Set(['PLUS','MINUS','STAR','SLASH','PERCENT','EQ','NEQ','LT','GT','LTE','GTE','AND','OR','NOT','ASSIGN']);
+  const delimiters = new Set(['LPAREN','RPAREN','LBRACE','RBRACE','LBRACKET','RBRACKET','SEMICOLON','COMMA','COLON']);
+
+  function tokenClass(type) {
+    if (keywords.has(type)) return 'tt-keyword';
+    if (literals.has(type)) return 'tt-literal';
+    if (operators.has(type)) return 'tt-operator';
+    if (type === 'IDENTIFIER') return 'tt-identifier';
+    if (delimiters.has(type)) return 'tt-delimiter';
+    return '';
+  }
+
+  const toks = data.tokens.filter(t => t.type !== 'EOF');
+  document.getElementById('tab-tokens').innerHTML = toks.length === 0
+    ? `<div class="empty-state"><div class="icon">🔤</div><div>Sin tokens</div></div>`
+    : `<table class="token-table"><thead><tr><th>#</th><th>Tipo</th><th>Valor</th><th>Línea</th><th>Col</th></tr></thead><tbody>
+    ${toks.map((t,i) => `<tr><td class="quad-idx">${i+1}</td>
+      <td><span class="token-type ${tokenClass(t.type)}">${t.type}</span></td>
+      <td><code>${escHtml(t.value)}</code></td>
+      <td>${t.line}</td><td>${t.column}</td></tr>`).join('')}
+    </tbody></table>`;
+
+  // Cuádruplas
+  document.getElementById('tab-quads').innerHTML = data.quadruples.length === 0
+    ? `<div class="empty-state"><div class="icon">📋</div><div>Sin cuádruplas generadas</div></div>`
+    : `<table class="quad-table"><thead><tr><th>#</th><th>Operador</th><th>Arg1</th><th>Arg2</th><th>Resultado</th></tr></thead><tbody>
+    ${data.quadruples.map((q,i) => `<tr>
+      <td class="quad-idx">${i+1}</td>
+      <td class="quad-op">${escHtml(q.op)}</td>
+      <td>${q.arg1 ? escHtml(q.arg1) : '<span class="quad-dash">—</span>'}</td>
+      <td>${q.arg2 ? escHtml(q.arg2) : '<span class="quad-dash">—</span>'}</td>
+      <td><strong>${escHtml(q.result)}</strong></td></tr>`).join('')}
+    </tbody></table>`;
+
+  // Errores
+  document.getElementById('tab-errors').innerHTML = data.errors.length === 0
+    ? `<div class="no-errors">✅ Sin errores de compilación</div>`
+    : `<div class="error-list">${data.errors.map(e => `<div class="error-item">⚠ ${escHtml(e)}</div>`).join('')}</div>`;
+
+  // Tabla de símbolos
+  if (data.symbol_table) {
+    const syms = data.symbol_table.symbols || {};
+    const rows = Object.entries(syms);
+    document.getElementById('tab-symbols').innerHTML = rows.length === 0
+      ? `<div class="empty-state"><div class="icon">📚</div><div>Tabla de símbolos vacía</div></div>`
+      : `<table class="sym-table"><thead><tr><th>Nombre</th><th>Tipo</th><th>Scope</th></tr></thead><tbody>
+      ${rows.map(([n,s]) => `<tr><td>${escHtml(n)}</td><td>${escHtml(s.type)}</td><td>global</td></tr>`).join('')}
+      </tbody></table>`;
+  }
+
+  // AST simple
+  if (data.success) {
+    document.getElementById('tab-ast').innerHTML = `<div class="ast-tree">${buildASTText(data)}</div>`;
+  } else {
+    document.getElementById('tab-ast').innerHTML = `<div class="empty-state"><div class="icon">🌳</div><div>AST no disponible (errores de compilación)</div></div>`;
+  }
+}
+
+function buildASTText(data) {
+  // Reconstruimos un AST visual básico desde las cuádruplas
+  let lines = ['<span class="ast-node">ProgramNode</span>'];
+  const quads = data.quadruples;
+  let i = 0;
+  while (i < quads.length) {
+    const q = quads[i];
+    if (q.op === 'FUNC_BEGIN') {
+      lines.push(`├─ <span class="ast-node">FunctionDecl</span> <span class="ast-val">${escHtml(q.arg1)}</span>`);
+    } else if (q.op === 'FUNC_END') {
+      // nada
+    } else if (q.op === 'PARAM') {
+      lines.push(`│  ├─ <span class="ast-leaf">Param: ${escHtml(q.arg1)}</span>`);
+    } else if (q.op === 'DECL') {
+      lines.push(`├─ <span class="ast-node">VarDecl</span> <span class="ast-val">${escHtml(q.result)}</span>: ${escHtml(q.arg1)}`);
+    } else if (q.op === '=') {
+      lines.push(`├─ <span class="ast-node">Assign</span> <span class="ast-val">${escHtml(q.result)}</span> = ${escHtml(q.arg1)}`);
+    } else if (q.op === 'PRINT') {
+      lines.push(`├─ <span class="ast-node">Print</span>(<span class="ast-val">${escHtml(q.arg1)}</span>)`);
+    } else if (q.op === 'LABEL') {
+      lines.push(`├─ <span class="ast-leaf">Label: ${escHtml(q.result)}</span>`);
+    } else if (q.op === 'IF_FALSE') {
+      lines.push(`├─ <span class="ast-node">If</span> !${escHtml(q.arg1)} → ${escHtml(q.result)}`);
+    } else if (q.op === 'GOTO') {
+      lines.push(`│  └─ <span class="ast-leaf">goto ${escHtml(q.result)}</span>`);
+    } else if (q.op === 'RETURN') {
+      lines.push(`│  └─ <span class="ast-node">Return</span> ${q.arg1 ? escHtml(q.arg1) : 'void'}`);
+    } else if (q.op === 'CALL') {
+      lines.push(`├─ <span class="ast-node">Call</span> <span class="ast-val">${escHtml(q.arg1)}</span>(${q.arg2} args) → ${escHtml(q.result)}`);
+    } else {
+      lines.push(`├─ <span class="ast-leaf">${escHtml(q.op)} ${q.arg1||''} ${q.arg2||''} → ${escHtml(q.result)}</span>`);
+    }
+    i++;
+  }
+  return lines.join('\n');
+}
+
+function renderError(msg) {
+  document.getElementById('tab-errors').innerHTML = `<div class="error-list"><div class="error-item">⚠ ${escHtml(msg)}</div></div>`;
+  showTab('errors');
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Enter para compilar
+document.getElementById('editor').addEventListener('keydown', e => {
+  if (e.key === 'F5') { e.preventDefault(); compile(); }
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const t = e.target, s = t.selectionStart;
+    t.value = t.value.substring(0,s) + '    ' + t.value.substring(t.selectionEnd);
+    t.selectionStart = t.selectionEnd = s + 4;
+  }
+});
+</script>
+</body>
+</html>

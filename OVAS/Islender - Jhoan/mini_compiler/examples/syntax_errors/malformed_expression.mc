@@ -1,0 +1,2 @@
+// Error sintáctico
+int x = ;

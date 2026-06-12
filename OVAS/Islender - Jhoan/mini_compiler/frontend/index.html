@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es" class="ova-phase-tac">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Compilador TAC — Islender &amp; Jhoan | USB</title>
+<link rel="stylesheet" href="../../../shared/usb-ova-tokens.css">
+<link rel="stylesheet" href="../../../shared/usb-ova-components.css">
+<script src="../../../shared/usb-ova-theme.js"></script>
+<style>
+  /* Estilos específicos Mini Compilador (complementan shared) */
+  html, body { height: 100%; }
+  body.usb-ova-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  .mc-app-main {
+    flex: 1;
+    min-height: 0;
+    border-top: 1px solid var(--usb-border);
+  }
+  .mc-editor-panel { border-right: 1px solid var(--usb-border); border-radius: 0; }
+  .mc-results-panel { border-radius: 0; }
+  .ova-panel__body--editor {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+  .ova-panel__body--tabs {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+  .ova-panel__body--tabs .ova-tab-content {
+    flex: 1;
+    min-height: 0;
+  }
+  .mc-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  .mc-quick-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .mc-quick-examples .ova-btn-secondary {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  #example-select { min-width: 150px; }
+  textarea#editor {
+    flex: 1;
+    width: 100%;
+    min-height: 180px;
+    padding: 16px 18px;
+    border: none;
+    outline: none;
+    resize: none;
+    background: var(--usb-bg);
+    color: var(--usb-text);
+    font-family: var(--usb-font-mono);
+    font-size: 0.875rem;
+    line-height: 1.65;
+    tab-size: 4;
+  }
+  textarea#editor::placeholder { color: var(--usb-text-subtle); }
+  textarea#editor:focus {
+    box-shadow: inset 0 0 0 1px var(--usb-teal);
+  }
+  /* Token type chips — semántica académica */
+  .token-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--usb-radius-sm);
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--usb-font-mono);
+  }
+  .tt-keyword { background: rgba(234, 88, 12, 0.15); color: var(--phase-tac); }
+  .tt-literal { background: rgba(0, 168, 150, 0.12); color: var(--usb-teal); }
+  .tt-operator { background: rgba(245, 158, 11, 0.12); color: var(--usb-warning); }
+  .tt-identifier { background: rgba(0, 104, 55, 0.15); color: #4ade80; }
+  .tt-delimiter { background: rgba(148, 163, 184, 0.1); color: var(--usb-text-muted); }
+  .quad-op { color: var(--phase-tac); font-weight: 700; }
+  .quad-dash { color: var(--usb-text-subtle); }
+  .ast-tree {
+    font-family: var(--usb-font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.85;
+    white-space: pre;
+    padding: 4px;
+  }
+  .ast-node { color: var(--phase-tac); }
+  .ast-val { color: var(--usb-teal); }
+  .ast-leaf { color: var(--usb-text-muted); }
+  .error-list { display: flex; flex-direction: column; gap: 8px; }
+  .error-item {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: var(--usb-radius-md);
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--usb-error);
+  }
+  .no-errors {
+    color: var(--usb-success);
+    text-align: center;
+    padding: 40px 16px;
+    font-weight: 600;
+  }
+  @media (max-width: 900px) {
+    .mc-editor-panel { border-right: none; border-bottom: 1px solid var(--usb-border); }
+  }
+</style>
+</head>
+<body class="usb-ova-body ova-phase-tac">
+
+<header class="ova-header">
+  <div class="ova-header__brand">
+    <div class="ova-header__icon" aria-hidden="true">TAC</div>
+    <div class="ova-header__text">
+      <h1 class="ova-header__title">Mini Compilador</h1>
+      <p class="ova-header__subtitle">Teoría de Compiladores · Lexer · Parser · Semántico · TAC</p>
+    </div>
+    <span class="ova-header__meta">MiniC v1.0</span>
+  </div>
+  <div class="ova-header__actions">
+    <div id="api-status-badge" class="ova-badge-api" role="status" aria-live="polite">
+      <span id="api-status-dot">⏳</span>
+      <span id="api-status-text">Verificando conexión...</span>
+    </div>
+  </div>
+</header>
+
+<main class="mc-app-main ova-layout-split">
+
+  <section class="ova-panel mc-editor-panel">
+    <div class="ova-panel__header">
+      <span>Código fuente (.mc)</span>
+      <div class="mc-quick-examples">
+        <select id="example-select" class="ova-select" title="Cargar ejemplo">
+          <option value="" disabled selected>Ejemplos...</option>
+        </select>
+        <button class="ova-btn-secondary" type="button" onclick="loadExample('hello')">Hello</button>
+        <button class="ova-btn-secondary" type="button" onclick="loadExample('func')">Funciones</button>
+        <button class="ova-btn-secondary" type="button" onclick="loadExample('ctrl')">Control</button>
+        <button class="ova-btn-secondary" type="button" onclick="loadExample('err')">Error</button>
+      </div>
+    </div>
+    <div class="ova-panel__body ova-panel__body--editor">
+      <textarea id="editor" spellcheck="false" placeholder="// Escribe tu código MiniC aquí
+// Tipos: int, float, string, bool
+// Estructuras: if/else, while, for
+// Funciones: func nombre(tipo param) : tipo { ... }
+// Salida: print(expr);
+
+print(&quot;Hola, mundo!&quot;);"></textarea>
+    </div>
+    <div class="ova-panel__footer mc-toolbar">
+      <button class="ova-btn-primary btn-compile" type="button" onclick="compile()">▶ Compilar</button>
+      <button class="ova-btn-secondary btn-clear" type="button" onclick="clearAll()">✕ Limpiar</button>
+    </div>
+  </section>
+
+  <section class="ova-panel mc-results-panel">
+    <div id="status-bar" class="ova-status-bar" style="display:none" aria-live="polite"></div>
+    <div class="ova-tabs" role="tablist" aria-label="Resultados de compilación">
+      <button type="button" class="ova-tab active" role="tab" aria-selected="true" onclick="showTab('tokens')">Tokens</button>
+      <button type="button" class="ova-tab" role="tab" onclick="showTab('quads')">Cuádruplas</button>
+      <button type="button" class="ova-tab" role="tab" onclick="showTab('ast')">AST</button>
+      <button type="button" class="ova-tab" role="tab" onclick="showTab('symbols')">Símbolos</button>
+      <button type="button" class="ova-tab" role="tab" onclick="showTab('errors')">Errores</button>
+    </div>
+    <div class="ova-panel__body ova-panel__body--tabs">
+      <div id="tab-tokens" class="ova-tab-content active" role="tabpanel">
+        <div class="ova-empty-state"><div class="ova-empty-state__icon">🔤</div><div>Compila para ver los tokens</div></div>
+      </div>
+      <div id="tab-quads" class="ova-tab-content" role="tabpanel">
+        <div class="ova-empty-state"><div class="ova-empty-state__icon">📋</div><div>Compila para ver las cuádruplas</div></div>
+      </div>
+      <div id="tab-ast" class="ova-tab-content" role="tabpanel">
+        <div class="ova-empty-state"><div class="ova-empty-state__icon">🌳</div><div>Compila para ver el AST</div></div>
+      </div>
+      <div id="tab-symbols" class="ova-tab-content" role="tabpanel">
+        <div class="ova-empty-state"><div class="ova-empty-state__icon">📚</div><div>Compila para ver la tabla de símbolos</div></div>
+      </div>
+      <div id="tab-errors" class="ova-tab-content" role="tabpanel">
+        <div class="ova-empty-state"><div class="ova-empty-state__icon">✅</div><div>Sin errores por ahora</div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/** URL base del backend FastAPI (vacío = same-origin /api/...) */
+const API_CONFIG = {
+  baseUrl: '',
+
+  init() {
+    const saved = localStorage.getItem('url-mini-compilador');
+    if (saved && saved.trim()) {
+      this.baseUrl = saved.trim().replace(/\/$/, '');
+      return;
+    }
+    const host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1') {
+      this.baseUrl = 'http://localhost:8002';
+    }
+  },
+
+  setBaseUrl(url) {
+    if (url && typeof url === 'string' && url.trim()) {
+      this.baseUrl = url.trim().replace(/\/$/, '');
+    }
+  },
+
+  resolve(path) {
+    const normalized = path.startsWith('/') ? path : `/${path}`;
+    if (normalized === '/health') {
+      return this.baseUrl ? `${this.baseUrl}${normalized}` : normalized;
+    }
+    const apiPath = normalized.startsWith('/api') ? normalized : `/api${normalized}`;
+    if (this.baseUrl) {
+      return `${this.baseUrl}${apiPath}`;
+    }
+    return apiPath;
+  },
+
+  isLocalDev() {
+    const base = (this.baseUrl || '').toLowerCase();
+    if (base.includes('localhost') || base.includes('127.0.0.1')) {
+      return true;
+    }
+    const host = window.location.hostname;
+    return !this.baseUrl && (host === 'localhost' || host === '127.0.0.1');
+  }
+};
+
+let apiConnectionState = 'checking';
+
+const EXAMPLES_EMBEDDED = {
+  hello: `// Hola Mundo\nprint("Hola, mundo!");`,
+  func: `func suma(int a, int b) : int {\n    return a + b;\n}\n\nint resultado = suma(10, 20);\nprint(resultado);`,
+  ctrl: `int x = 10;\n\nif (x > 5) {\n    print("x es mayor que 5");\n} else {\n    print("x es menor o igual");\n}\n\nint i = 0;\nwhile (i < 3) {\n    print(i);\n    i = i + 1;\n}`,
+  err: `// Error semántico: variable no declarada\nprint(variableNoDeclarada);`
+};
+
+const EXAMPLE_SOURCES = [
+  { key: 'hello', label: 'Hello World', path: '../examples/valid/hello_world.mc' },
+  { key: 'func', label: 'Funciones', path: '../examples/valid/functions.mc' },
+  { key: 'ctrl', label: 'Control de flujo', path: '../examples/valid/control_structures.mc' },
+  { key: 'err', label: 'Error semántico', path: '../examples/semantic_errors/undeclared_variable.mc' },
+  { key: 'syntax', label: 'Error sintáctico', path: '../examples/syntax_errors/malformed_expression.mc' },
+  { key: 'opt', label: 'Optimización', path: '../examples/optimization/constant_folding_demo.mc' }
+];
+
+let EXAMPLES = { ...EXAMPLES_EMBEDDED };
+
+function setupPortalMessageListener() {
+  window.addEventListener('message', (event) => {
+    if (event.data?.type !== 'USB_PORTAL_CONFIG') return;
+    const url = event.data.config?.apiUrls?.miniCompilador;
+    if (url) {
+      API_CONFIG.setBaseUrl(url);
+      updateConnectionStatus();
+    }
+  });
+}
+
+async function probeApiConnection() {
+  try {
+    const response = await fetch(API_CONFIG.resolve('/health'), {
+      method: 'GET',
+      signal: AbortSignal.timeout(5000)
+    });
+    if (!response.ok) return false;
+    const data = await response.json();
+    return data?.status === 'ok';
+  } catch {
+    return false;
+  }
+}
+
+async function updateConnectionStatus() {
+  const badge = document.getElementById('api-status-badge');
+  const dot = document.getElementById('api-status-dot');
+  const text = document.getElementById('api-status-text');
+  if (!badge || !dot || !text) return;
+
+  badge.className = 'ova-badge-api';
+  dot.textContent = '⏳';
+  text.textContent = 'Verificando conexión...';
+
+  const online = await probeApiConnection();
+
+  if (online) {
+    apiConnectionState = API_CONFIG.isLocalDev() ? 'local' : 'remote';
+    if (apiConnectionState === 'local') {
+      badge.classList.add('status-local');
+      dot.textContent = '🟡';
+      text.textContent = 'Desarrollo local';
+    } else {
+      badge.classList.add('status-remote');
+      dot.textContent = '🟢';
+      text.textContent = 'API remota';
+    }
+  } else {
+    apiConnectionState = 'offline';
+    badge.classList.add('status-offline');
+    dot.textContent = '🔴';
+    text.textContent = 'Sin conexión — configure API en portal USB';
+  }
+}
+
+async function loadExamplesFromFiles() {
+  const select = document.getElementById('example-select');
+  const loaded = { ...EXAMPLES_EMBEDDED };
+
+  await Promise.all(EXAMPLE_SOURCES.map(async (src) => {
+    try {
+      const resp = await fetch(src.path);
+      if (!resp.ok) return;
+      const content = await resp.text();
+      if (content && content.trim()) {
+        loaded[src.key] = content;
+      }
+    } catch {
+      /* fallback embebido */
+    }
+  }));
+
+  EXAMPLES = loaded;
+
+  if (!select) return;
+  select.innerHTML = '<option value="" disabled selected>Ejemplos...</option>';
+  EXAMPLE_SOURCES.forEach((src) => {
+    if (!EXAMPLES[src.key]) return;
+    const opt = document.createElement('option');
+    opt.value = src.key;
+    opt.textContent = src.label;
+    select.appendChild(opt);
+  });
+}
+
+function loadExample(key) {
+  const code = EXAMPLES[key];
+  if (code) document.getElementById('editor').value = code;
+}
+
+function showTab(name) {
+  const names = ['tokens', 'quads', 'ast', 'symbols', 'errors'];
+  document.querySelectorAll('.ova-tab').forEach((t, i) => {
+    const active = names[i] === name;
+    t.classList.toggle('active', active);
+    t.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+  document.querySelectorAll('.ova-tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function emptyStateHtml(icon, msg) {
+  return `<div class="ova-empty-state"><div class="ova-empty-state__icon">${icon}</div><div>${msg}</div></div>`;
+}
+
+function clearAll() {
+  document.getElementById('editor').value = '';
+  const sb = document.getElementById('status-bar');
+  sb.style.display = 'none';
+  const placeholders = {
+    tokens: ['🔤', 'Compila para ver resultados'],
+    quads: ['📋', 'Compila para ver resultados'],
+    ast: ['🌳', 'Compila para ver resultados'],
+    symbols: ['📚', 'Compila para ver resultados'],
+    errors: ['⏳', 'Compila para ver resultados']
+  };
+  Object.entries(placeholders).forEach(([t, [icon, msg]]) => {
+    document.getElementById('tab-' + t).innerHTML = emptyStateHtml(icon, msg);
+  });
+}
+
+async function compile() {
+  const source = document.getElementById('editor').value.trim();
+  if (!source) return;
+  const btn = document.querySelector('.btn-compile');
+  btn.textContent = '⏳ Compilando...';
+  btn.disabled = true;
+
+  try {
+    const resp = await fetch(API_CONFIG.resolve('/api/compile'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ source })
+    });
+    if (!resp.ok) {
+      const errText = await resp.text();
+      renderError(`Error HTTP ${resp.status}: ${errText || resp.statusText}`);
+      return;
+    }
+    const data = await resp.json();
+    renderResults(data);
+  } catch (e) {
+    renderError('Error de conexión: ' + e.message + '. Configure la URL de la API en el portal USB.');
+    updateConnectionStatus();
+  } finally {
+    btn.textContent = '▶ Compilar';
+    btn.disabled = false;
+  }
+}
+
+function renderResults(data) {
+  const sb = document.getElementById('status-bar');
+  sb.style.display = 'flex';
+  if (data.success) {
+    sb.className = 'ova-status-bar status-ok';
+    sb.innerHTML = `<span class="ova-status-bar__dot"></span> Compilación exitosa — ${data.tokens.length} tokens · ${data.quadruples.length} cuádruplas`;
+  } else {
+    sb.className = 'ova-status-bar status-err';
+    sb.innerHTML = `<span class="ova-status-bar__dot"></span> Errores encontrados (${data.errors.length})`;
+    showTab('errors');
+  }
+
+  const keywords = new Set(['INT','FLOAT_KW','STRING_KW','BOOL','IF','ELSE','WHILE','FOR','RETURN','FUNC','VOID','PRINT','TRUE','FALSE','BOOLEAN']);
+  const literals = new Set(['INTEGER','FLOAT','STRING','BOOLEAN']);
+  const operators = new Set(['PLUS','MINUS','STAR','SLASH','PERCENT','EQ','NEQ','LT','GT','LTE','GTE','AND','OR','NOT','ASSIGN']);
+  const delimiters = new Set(['LPAREN','RPAREN','LBRACE','RBRACE','LBRACKET','RBRACKET','SEMICOLON','COMMA','COLON']);
+
+  function tokenClass(type) {
+    if (keywords.has(type)) return 'tt-keyword';
+    if (literals.has(type)) return 'tt-literal';
+    if (operators.has(type)) return 'tt-operator';
+    if (type === 'IDENTIFIER') return 'tt-identifier';
+    if (delimiters.has(type)) return 'tt-delimiter';
+    return '';
+  }
+
+  const toks = data.tokens.filter(t => t.type !== 'EOF');
+  document.getElementById('tab-tokens').innerHTML = toks.length === 0
+    ? emptyStateHtml('🔤', 'Sin tokens')
+    : `<table class="ova-table"><thead><tr><th>#</th><th>Tipo</th><th>Valor</th><th>Línea</th><th>Col</th></tr></thead><tbody>
+    ${toks.map((t, i) => `<tr><td class="ova-table__idx">${i + 1}</td>
+      <td><span class="token-type ${tokenClass(t.type)}">${t.type}</span></td>
+      <td><code>${escHtml(t.value)}</code></td>
+      <td>${t.line}</td><td>${t.column}</td></tr>`).join('')}
+    </tbody></table>`;
+
+  document.getElementById('tab-quads').innerHTML = data.quadruples.length === 0
+    ? emptyStateHtml('📋', 'Sin cuádruplas generadas')
+    : `<table class="ova-table"><thead><tr><th>#</th><th>Operador</th><th>Arg1</th><th>Arg2</th><th>Resultado</th></tr></thead><tbody>
+    ${data.quadruples.map((q, i) => `<tr>
+      <td class="ova-table__idx">${i + 1}</td>
+      <td class="quad-op">${escHtml(q.op)}</td>
+      <td>${q.arg1 ? escHtml(q.arg1) : '<span class="quad-dash">—</span>'}</td>
+      <td>${q.arg2 ? escHtml(q.arg2) : '<span class="quad-dash">—</span>'}</td>
+      <td><strong>${escHtml(q.result)}</strong></td></tr>`).join('')}
+    </tbody></table>`;
+
+  document.getElementById('tab-errors').innerHTML = data.errors.length === 0
+    ? `<div class="no-errors">✅ Sin errores de compilación</div>`
+    : `<div class="error-list">${data.errors.map(e => `<div class="error-item">⚠ ${escHtml(e)}</div>`).join('')}</div>`;
+
+  if (data.symbol_table) {
+    const syms = data.symbol_table.symbols || {};
+    const rows = Object.entries(syms);
+    document.getElementById('tab-symbols').innerHTML = rows.length === 0
+      ? emptyStateHtml('📚', 'Tabla de símbolos vacía')
+      : `<table class="ova-table"><thead><tr><th>Nombre</th><th>Tipo</th><th>Scope</th></tr></thead><tbody>
+      ${rows.map(([n, s]) => `<tr><td>${escHtml(n)}</td><td>${escHtml(s.type)}</td><td>global</td></tr>`).join('')}
+      </tbody></table>`;
+  }
+
+  if (data.success) {
+    document.getElementById('tab-ast').innerHTML = `<div class="ast-tree">${buildASTText(data)}</div>`;
+  } else {
+    document.getElementById('tab-ast').innerHTML = emptyStateHtml('🌳', 'AST no disponible (errores de compilación)');
+  }
+}
+
+function buildASTText(data) {
+  let lines = ['<span class="ast-node">ProgramNode</span>'];
+  const quads = data.quadruples;
+  let i = 0;
+  while (i < quads.length) {
+    const q = quads[i];
+    if (q.op === 'FUNC_BEGIN') {
+      lines.push(`├─ <span class="ast-node">FunctionDecl</span> <span class="ast-val">${escHtml(q.arg1)}</span>`);
+    } else if (q.op === 'FUNC_END') {
+      /* skip */
+    } else if (q.op === 'PARAM') {
+      lines.push(`│  ├─ <span class="ast-leaf">Param: ${escHtml(q.arg1)}</span>`);
+    } else if (q.op === 'DECL') {
+      lines.push(`├─ <span class="ast-node">VarDecl</span> <span class="ast-val">${escHtml(q.result)}</span>: ${escHtml(q.arg1)}`);
+    } else if (q.op === '=') {
+      lines.push(`├─ <span class="ast-node">Assign</span> <span class="ast-val">${escHtml(q.result)}</span> = ${escHtml(q.arg1)}`);
+    } else if (q.op === 'PRINT') {
+      lines.push(`├─ <span class="ast-node">Print</span>(<span class="ast-val">${escHtml(q.arg1)}</span>)`);
+    } else if (q.op === 'LABEL') {
+      lines.push(`├─ <span class="ast-leaf">Label: ${escHtml(q.result)}</span>`);
+    } else if (q.op === 'IF_FALSE') {
+      lines.push(`├─ <span class="ast-node">If</span> !${escHtml(q.arg1)} → ${escHtml(q.result)}`);
+    } else if (q.op === 'GOTO') {
+      lines.push(`│  └─ <span class="ast-leaf">goto ${escHtml(q.result)}</span>`);
+    } else if (q.op === 'RETURN') {
+      lines.push(`│  └─ <span class="ast-node">Return</span> ${q.arg1 ? escHtml(q.arg1) : 'void'}`);
+    } else if (q.op === 'CALL') {
+      lines.push(`├─ <span class="ast-node">Call</span> <span class="ast-val">${escHtml(q.arg1)}</span>(${q.arg2} args) → ${escHtml(q.result)}`);
+    } else {
+      lines.push(`├─ <span class="ast-leaf">${escHtml(q.op)} ${q.arg1 || ''} ${q.arg2 || ''} → ${escHtml(q.result)}</span>`);
+    }
+    i++;
+  }
+  return lines.join('\n');
+}
+
+function renderError(msg) {
+  document.getElementById('tab-errors').innerHTML = `<div class="error-list"><div class="error-item">⚠ ${escHtml(msg)}</div></div>`;
+  showTab('errors');
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+async function initApp() {
+  USB_OVA_THEME.init();
+  API_CONFIG.init();
+  setupPortalMessageListener();
+  await loadExamplesFromFiles();
+  document.getElementById('example-select')?.addEventListener('change', (e) => {
+    if (e.target.value) loadExample(e.target.value);
+  });
+  document.getElementById('editor').addEventListener('keydown', e => {
+    if (e.key === 'F5') { e.preventDefault(); compile(); }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const t = e.target, s = t.selectionStart;
+      t.value = t.value.substring(0, s) + '    ' + t.value.substring(t.selectionEnd);
+      t.selectionStart = t.selectionEnd = s + 4;
+    }
+  });
+  await updateConnectionStatus();
+}
+
+window.addEventListener('DOMContentLoaded', initApp);
+</script>
+</body>
+</html>
