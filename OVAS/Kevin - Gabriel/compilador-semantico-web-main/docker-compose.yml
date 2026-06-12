@@ -1,0 +1,15 @@
+services:
+  # Servicio web principal del compilador semantico.
+  compilador-semantico:
+    # Construye la imagen usando el Dockerfile de la carpeta actual.
+    build: .
+
+    # Nombre del contenedor para identificarlo facilmente en Docker.
+    container_name: compilador-semantico-web
+
+    # Reinicia el contenedor automaticamente salvo que se detenga manualmente.
+    restart: unless-stopped
+
+    # Publica el puerto 80 de Nginx en el puerto 8097 del servidor.
+    ports:
+      - "8097:80"

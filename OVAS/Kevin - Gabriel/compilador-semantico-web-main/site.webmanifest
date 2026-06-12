@@ -1,0 +1,14 @@
+{
+  "name": "Compilador Semántico",
+  "short_name": "Compilador",
+  "description": "Analizador interactivo de expresiones, variables y validación semántica.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EEF2F8",
+  "theme_color": "#08152D",
+  "icons": [
+    { "src": "favicon.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "apple-touch-icon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

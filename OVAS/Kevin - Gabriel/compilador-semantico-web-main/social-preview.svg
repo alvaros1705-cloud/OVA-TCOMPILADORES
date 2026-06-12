@@ -1,0 +1,26 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="630" fill="#F0F4F8"/>
+<rect x="50" y="46" width="1100" height="536" rx="42" fill="#09843B"/>
+<rect x="96" y="88" width="94" height="94" rx="25" fill="white"/>
+<rect x="108" y="100" width="70" height="70" rx="19" fill="#2F59D1"/>
+<text x="220" y="148" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="800">Compilador Semántico</text>
+<text x="222" y="196" fill="#E0F6E8" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">Teoría de Compiladores · Universidad Simón Bolívar</text>
+<text x="222" y="238" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="25">Gabriel Argenis Medina Carrero · Kevin Garcia</text>
+<text x="222" y="274" fill="#D9F1E4" font-family="Arial, Helvetica, sans-serif" font-size="20">Docente evaluador: Álvaro Salamanca · Sede Cúcuta</text>
+<rect x="96" y="315" width="190" height="56" rx="18" fill="white"/>
+<text x="146" y="351" fill="#053A2B" font-family="Arial" font-size="21" font-weight="700">Tokens</text>
+<rect x="306" y="315" width="275" height="56" rx="18" fill="white"/>
+<text x="345" y="351" fill="#053A2B" font-family="Arial" font-size="21" font-weight="700">Tabla de símbolos</text>
+<rect x="601" y="315" width="295" height="56" rx="18" fill="white"/>
+<text x="638" y="351" fill="#053A2B" font-family="Arial" font-size="21" font-weight="700">Errores semánticos</text>
+<rect x="96" y="389" width="275" height="56" rx="18" fill="white"/>
+<text x="137" y="425" fill="#053A2B" font-family="Arial" font-size="21" font-weight="700">Código intermedio</text>
+<rect x="391" y="389" width="505" height="56" rx="18" fill="white"/>
+<text x="458" y="425" fill="#053A2B" font-family="Arial" font-size="19" font-weight="700">Deploy: GitHub → Dokploy → Cosmos</text>
+<rect x="905" y="292" width="220" height="210" rx="24" fill="#07122A" stroke="white" stroke-opacity=".34" stroke-width="2"/>
+<text x="925" y="366" fill="#E2FFED" font-family="Consolas, monospace" font-size="15" font-weight="700">entero edad = 20;</text>
+<text x="925" y="394" fill="#E2FFED" font-family="Consolas, monospace" font-size="15" font-weight="700">edad = edad + 1;</text>
+<text x="925" y="434" fill="#62EB9E" font-family="Consolas, monospace" font-size="15" font-weight="700">✓ análisis OK</text>
+<rect x="96" y="505" width="1008" height="47" rx="17" fill="white"/>
+<text x="153" y="535" fill="#05372F" font-family="Arial" font-size="21" font-weight="700">Analizador interactivo con validación semántica, tabla de símbolos y código intermedio</text>
+</svg>

@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="es" class="ova-phase-sem">
+<head>
+  <!--
+    index.html
+    Archivo principal de la interfaz.
+    Aqui se define la estructura visual de la pagina: encabezado, secciones,
+    editor de codigo, paneles de resultados, datos academicos y pie de pagina.
+  -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Compilador Semántico</title>
+  <meta name="description" content="Analizador interactivo de expresiones, variables y validación semántica en un minilenguaje didáctico." />
+  <meta name="theme-color" content="#08152D" />
+
+
+  <!-- Metadatos Open Graph/Twitter: controlan la vista previa del enlace al compartirlo en WhatsApp o redes. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Compilador Semántico" />
+  <meta property="og:title" content="Compilador Semántico" />
+  <meta property="og:description" content="Proyecto académico interactivo de análisis semántico con tokens, tabla de símbolos, errores explicados e integración en el Portal OVAS USB — Teoría de Compiladores." />
+  <meta property="og:url" content="" />
+  <meta property="og:image" content="social-preview.png?v=8" />
+  <meta property="og:image:secure_url" content="social-preview.png?v=8" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Vista previa del proyecto Compilador Semántico" />
+  <meta property="og:image:type" content="image/png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Compilador Semántico" />
+  <meta name="twitter:description" content="Proyecto académico interactivo de análisis semántico — Portal OVAS USB." />
+  <meta name="twitter:image" content="social-preview.png?v=8" />
+
+  <!-- Resuelve URLs absolutas de Open Graph según la ruta real (GitHub Pages, portal USB, Dokploy). -->
+  <script>
+    (function () {
+      var pageUrl = window.location.href.split('#')[0];
+      var baseUrl = pageUrl.replace(/[^/]*$/, '');
+      var imageUrl = baseUrl + 'social-preview.png?v=8';
+      function setMeta(selector, value) {
+        var el = document.querySelector(selector);
+        if (el) el.setAttribute('content', value);
+      }
+      setMeta('meta[property="og:url"]', pageUrl);
+      setMeta('meta[property="og:image"]', imageUrl);
+      setMeta('meta[property="og:image:secure_url"]', imageUrl);
+      setMeta('meta[name="twitter:image"]', imageUrl);
+    })();
+  </script>
+
+
+  <!-- Iconos, manifest y hoja de estilos principal. El parametro ?v ayuda a evitar que el navegador cargue archivos antiguos. -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3" />
+  <link rel="icon" type="image/png" href="favicon.png?v=3" />
+  <link rel="shortcut icon" href="favicon.ico?v=3" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=3" />
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="stylesheet" href="../../shared/usb-ova-tokens.css" />
+  <link rel="stylesheet" href="../../shared/usb-ova-components.css" />
+  <script src="../../shared/usb-ova-theme.js"></script>
+  <link rel="stylesheet" href="styles.css?v=1.6.0" />
+</head>
+<body class="usb-ova-body ova-phase-sem">
+
+  <!-- Encabezado institucional USB + navegación académica -->
+  <header class="ova-header sem-site-header">
+    <div class="ova-header__brand">
+      <a href="#inicio" class="sem-brand-link" aria-label="Inicio">
+        <div class="ova-header__icon" aria-hidden="true">&lt;/&gt;</div>
+        <div class="ova-header__text">
+          <h1 class="ova-header__title">Compilador Semántico</h1>
+          <p class="ova-header__subtitle">Kevin &amp; Gabriel · Análisis semántico interactivo</p>
+        </div>
+      </a>
+      <span class="ova-header__meta">Fase 3</span>
+    </div>
+    <nav class="sem-main-nav ova-header__actions" aria-label="Navegación principal">
+      <a href="#inicio" class="ova-btn-secondary sem-nav-link">Inicio</a>
+      <a href="#fases" class="ova-btn-secondary sem-nav-link">Fases</a>
+      <a href="#demo" class="ova-btn-secondary sem-nav-link">Demo</a>
+      <a href="#documentacion" class="ova-btn-secondary sem-nav-link">Documentación</a>
+      <a href="#acerca" class="ova-btn-secondary sem-nav-link">Acerca de</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Seccion de inicio: explica rapidamente que hace el compilador semantico. -->
+    <section id="inicio" class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-copy card soft-card">
+          <span class="eyebrow">Analizador interactivo</span>
+          <h1>Comprende tu código.<br><span>Detecta lo que importa.</span></h1>
+          <p>
+            Este compilador semántico analiza un minilenguaje paso a paso: reconoce tokens,
+            valida estructura, verifica significados, construye la tabla de símbolos y genera
+            una representación intermedia del programa.
+          </p>
+          <div class="hero-badges">
+            <div class="info-pill"><span>🛡</span> Validación semántica precisa</div>
+            <div class="info-pill"><span>▦</span> Tabla de símbolos dinámica</div>
+            <div class="info-pill"><span>⌘</span> Código intermedio didáctico</div>
+          </div>
+        </div>
+
+
+        <!-- Flujo del compilador: cada boton cambia la descripcion de la fase usando analyzer.js. -->
+        <div id="fases" class="flow-card card soft-card">
+          <div class="section-topline">
+            <h2>Flujo del compilador</h2>
+            <p>Explora cada etapa del análisis.</p>
+          </div>
+
+          <div class="phase-flow" role="tablist" aria-label="Fases del compilador">
+            <button class="phase-button phase-card active" type="button" data-phase="fuente">
+              <span class="phase-icon">📄</span>
+              <strong>Fuente</strong>
+              <small>Código original</small>
+            </button>
+            <span class="phase-arrow">→</span>
+            <button class="phase-button phase-card" type="button" data-phase="lexico">
+              <span class="phase-icon">🔎</span>
+              <strong>Léxico</strong>
+              <small>Tokens</small>
+            </button>
+            <span class="phase-arrow">→</span>
+            <button class="phase-button phase-card" type="button" data-phase="sintactico">
+              <span class="phase-icon">{ }</span>
+              <strong>Sintáctico</strong>
+              <small>Estructura</small>
+            </button>
+            <span class="phase-arrow">→</span>
+            <button class="phase-button phase-card highlight" type="button" data-phase="semantico">
+              <span class="phase-icon">✓</span>
+              <strong>Semántico</strong>
+              <small>Significado</small>
+            </button>
+            <span class="phase-arrow">→</span>
+            <button class="phase-button phase-card" type="button" data-phase="intermedio">
+              <span class="phase-icon">▤</span>
+              <strong>Código intermedio</strong>
+              <small>Representación</small>
+            </button>
+          </div>
+
+          <article class="phase-detail public-detail" id="phaseDetail">
+            <span class="phase-detail__tag">Entrada</span>
+            <h3>Código fuente</h3>
+            <p>Es el texto que el usuario escribe en el editor. Aún no ha sido validado.</p>
+            <ul>
+              <li><strong>Qué hace:</strong> recibe el programa original.</li>
+              <li><strong>Qué produce:</strong> la entrada que luego será separada en tokens.</li>
+              <li><strong>Qué se ve:</strong> el contenido completo del editor.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Bloque de reconocimiento: resume que elementos entiende el analizador. -->
+    <section class="recognition-section">
+      <div class="container recognition-grid card soft-card">
+        <div class="recognition-copy">
+          <span class="eyebrow">Qué reconoce</span>
+          <h2>Qué entiende este analizador</h2>
+          <p>Estos son algunos de los elementos clave que el motor identifica, valida y explica.</p>
+        </div>
+
+        <article class="mini-feature">
+          <div class="mini-feature__icon violet">123</div>
+          <div>
+            <h3>Tipos de datos</h3>
+            <p>Enteros, decimales, textos y lógicos.</p>
+            <div class="chips">
+              <span>20</span>
+              <span>4.5</span>
+              <span>"Gabriel"</span>
+              <span>verdadero</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="mini-feature">
+          <div class="mini-feature__icon cyan">▦</div>
+          <div>
+            <h3>Declaraciones</h3>
+            <p>Variables con tipo y valor inicial.</p>
+            <code class="code-pill">entero edad = 20;</code>
+          </div>
+        </article>
+
+        <article class="mini-feature">
+          <div class="mini-feature__icon orange">&lt;&gt;</div>
+          <div>
+            <h3>Operadores</h3>
+            <p>Aritméticos, relacionales y lógicos.</p>
+            <div class="chips">
+              <span>+</span><span>-</span><span>*</span><span>/</span><span>&gt;=</span><span>==</span><span>&amp;&amp;</span><span>||</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="mini-feature">
+          <div class="mini-feature__icon red">!</div>
+          <div>
+            <h3>Errores detectados</h3>
+            <p>Sintaxis y semántica con ayuda clara.</p>
+            <div class="chips chips-error">
+              <span>variable no declarada</span>
+              <span>tipo incompatible</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
+    <!-- Demo interactiva: editor, botones de ejemplos, metricas y pestanas de resultados. -->
+    <section id="demo" class="demo-section">
+      <div class="container">
+        <div class="demo-shell ova-panel">
+          <div class="ova-panel__header">Demo interactiva · Análisis semántico</div>
+          <div class="ova-panel__body demo-panel-body">
+            <div class="demo-toolbar">
+              <div class="toolbar-group example-buttons">
+                <button type="button" class="ova-btn-secondary" data-example="ok">✔ Ejemplo correcto</button>
+                <button type="button" class="ova-btn-secondary" data-example="errors">✖ Ejemplo con errores</button>
+                <button type="button" class="ova-btn-secondary" data-example="logic">⎇ Condicional</button>
+              </div>
+              <div class="toolbar-group action-buttons">
+                <button id="runButton" class="ova-btn-primary" type="button">▶ Analizar código</button>
+                <button id="clearButton" class="ova-btn-secondary" type="button">🗑 Limpiar</button>
+              </div>
+            </div>
+
+            <div class="demo-layout">
+              <section class="ova-panel editor-panel" aria-label="Editor de código">
+                <div class="ova-panel__header">Código fuente</div>
+                <div class="ova-panel__body editor-panel-body">
+                  <!-- textarea principal: analyzer.js lee este contenido para analizarlo. -->
+                  <div class="editor-frame">
+                    <textarea id="codeInput" spellcheck="false" aria-label="Código fuente"></textarea>
+                  </div>
+                </div>
+              </section>
+
+              <aside class="ova-panel result-summary" aria-label="Resumen del análisis">
+                <div class="ova-panel__header">Métricas</div>
+                <div class="ova-panel__body result-summary-body">
+                  <div class="metric-grid">
+                    <div class="metric-card">
+                      <span class="metric-label">Tokens</span>
+                      <strong id="tokenCount">0</strong>
+                      <small>Reconocidos</small>
+                    </div>
+                    <div class="metric-card">
+                      <span class="metric-label">Símbolos</span>
+                      <strong id="symbolCount">0</strong>
+                      <small>En tabla</small>
+                    </div>
+                    <div class="metric-card">
+                      <span class="metric-label">Errores</span>
+                      <strong id="errorCount">0</strong>
+                      <small>Detectados</small>
+                    </div>
+                  </div>
+
+                  <div id="verdict" class="verdict">Escribe código o carga un ejemplo para comenzar.</div>
+
+                  <div class="summary-card">
+                    <h3>Resultado del análisis</h3>
+                    <p>
+                      El sistema diferencia problemas de sintaxis y de semántica, muestra la línea,
+                      explica el error y sugiere una forma de corregirlo.
+                    </p>
+                  </div>
+                </div>
+              </aside>
+            </div>
+
+            <!-- Pestanas de salida: los resultados se renderizan dinamicamente desde analyzer.js. -->
+            <div class="tabs ova-tabs" role="tablist" aria-label="Resultados del compilador">
+              <button class="tab ova-tab active" type="button" data-tab="errors">Errores</button>
+              <button class="tab ova-tab" type="button" data-tab="symbols">Tabla de símbolos</button>
+              <button class="tab ova-tab" type="button" data-tab="tokens">Tokens</button>
+              <button class="tab ova-tab" type="button" data-tab="intermediate">Código intermedio</button>
+              <button class="tab ova-tab" type="button" data-tab="steps">Explicación</button>
+            </div>
+
+            <div class="demo-results">
+              <section id="errors" class="tab-panel ova-tab-content active"></section>
+              <section id="symbols" class="tab-panel ova-tab-content"></section>
+              <section id="tokens" class="tab-panel ova-tab-content"></section>
+              <section id="intermediate" class="tab-panel ova-tab-content"></section>
+              <section id="steps" class="tab-panel ova-tab-content"></section>
+            </div>
+          </div>
+          <div id="semStatusBar" class="ova-status-bar ova-panel__footer" role="status" aria-live="polite">
+            <span class="ova-status-bar__dot" aria-hidden="true"></span>
+            <span id="semStatusText">Listo · escribe código o carga un ejemplo</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Documentacion rapida del minilenguaje usado por la demo. -->
+    <section id="documentacion" class="docs-section">
+      <div class="container docs-grid">
+        <article class="doc-card card soft-card">
+          <span class="eyebrow">Documentación</span>
+          <h2>MiniLenguaje incluido</h2>
+          <p>La demo usa un minilenguaje compacto para que el análisis sea claro y fácil de seguir.</p>
+          <ul class="doc-list">
+            <li><strong>Tipos:</strong> <code>entero</code>, <code>decimal</code>, <code>texto</code>, <code>logico</code>.</li>
+            <li><strong>Declaración:</strong> <code>entero edad = 20;</code></li>
+            <li><strong>Asignación:</strong> <code>edad = edad + 1;</code></li>
+            <li><strong>Salida:</strong> <code>imprimir(nombre);</code></li>
+            <li><strong>Condición:</strong> <code>si (edad &gt;= 18) { ... }</code></li>
+          </ul>
+        </article>
+
+        <article class="doc-card card soft-card">
+          <span class="eyebrow">Interpretación</span>
+          <h2>Cómo leer la salida</h2>
+          <p>Después de ejecutar el análisis puedes revisar distintas vistas complementarias.</p>
+          <ul class="doc-list">
+            <li><strong>Errores:</strong> muestra línea, tipo de problema y sugerencia.</li>
+            <li><strong>Tabla de símbolos:</strong> registra variables, tipos, ámbito y valor.</li>
+            <li><strong>Tokens:</strong> lista cada lexema y su categoría.</li>
+            <li><strong>Código intermedio:</strong> resume lo que el analizador entendió del programa.</li>
+            <li><strong>Explicación:</strong> presenta una traza textual de las decisiones del análisis.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+
+    <!-- Seccion Acerca de: datos academicos, integrantes, docente y despliegue. -->
+    <section id="acerca" class="about-section">
+      <div class="container about-shell card soft-card">
+        <div class="about-header">
+          <div>
+            <span class="eyebrow eyebrow--green">Acerca de</span>
+            <h2>Información del proyecto</h2>
+            <p>
+              Este proyecto fue desarrollado como una herramienta web interactiva para comprender,
+              probar y explicar la etapa de análisis semántico dentro del proceso de compilación.
+            </p>
+          </div>
+          <div class="institution-badge institution-badge--logo" aria-label="Universidad Simón Bolívar">
+            <img src="assets/logo-unisimon-oficial.png" alt="Logosímbolo oficial Universidad Simón Bolívar" loading="lazy" />
+            <span>Sede Cúcuta · Ingeniería de Sistemas</span>
+          </div>
+        </div>
+
+        <div class="about-grid">
+          <article class="creator-card creator-card--photo">
+            <img src="assets/gabriel-medina.jpg" alt="Foto de Gabriel Argenis Medina Carrero" loading="lazy" />
+            <div>
+              <span class="creator-role">Creador</span>
+              <h3>Gabriel Argenis Medina Carrero</h3>
+              <p>Diseño, implementación web, documentación y despliegue del proyecto.</p>
+            </div>
+          </article>
+
+          <article class="creator-card creator-card--photo">
+            <img src="assets/kevin-garcia-animado.png" alt="Imagen animada de Kevin Garcia" loading="lazy" />
+            <div>
+              <span class="creator-role">Integrante</span>
+              <h3>Kevin Garcia</h3>
+              <p>Apoyo académico, revisión del enfoque, acompañamiento del desarrollo y validación de la presentación del proyecto.</p>
+            </div>
+          </article>
+
+          <article class="creator-card creator-card--photo">
+            <img src="assets/alvaro-salamanca.png" alt="Foto del docente Álvaro Salamanca" loading="lazy" />
+            <div>
+              <span class="creator-role">Docente evaluador</span>
+              <h3>Álvaro Salamanca</h3>
+              <p>Docente a cargo de la asignatura y de la evaluación académica del proyecto dentro del curso de Teoría de Compiladores.</p>
+            </div>
+          </article>
+
+          <article class="project-info-card project-info-card--wide">
+            <h3>Datos académicos</h3>
+            <dl class="info-list">
+              <div><dt>Universidad</dt><dd>Universidad Simón Bolívar</dd></div>
+              <div><dt>Sede</dt><dd>Cúcuta</dd></div>
+              <div><dt>Programa</dt><dd>Ingeniería de Sistemas</dd></div>
+              <div><dt>Curso</dt><dd>Teoría de Compiladores</dd></div>
+              <div><dt>Docente evaluador</dt><dd>Álvaro Salamanca</dd></div>
+              <div><dt>Equipo</dt><dd>Gabriel Argenis Medina Carrero · Kevin Garcia</dd></div>
+            </dl>
+          </article>
+
+          <article class="project-info-card project-info-card--why">
+            <h3>¿Por qué se creó?</h3>
+            <p>
+              La finalidad es convertir un tema abstracto en una experiencia visual. En lugar de solo
+              leer teoría, el usuario puede escribir instrucciones, ejecutar el análisis y observar cómo
+              se detectan variables, tipos, errores, tabla de símbolos y código intermedio.
+            </p>
+            <div class="institution-logo-card">
+              <span class="creator-role">Identidad institucional</span>
+              <img src="assets/logo-unisimon-oficial.png" alt="Logosímbolo oficial Universidad Simón Bolívar" loading="lazy" />
+            </div>
+          </article>
+        </div>
+
+        <div id="despliegue" class="deployment-card">
+          <div>
+            <span class="eyebrow eyebrow--green">Despliegue</span>
+            <h3>Cómo está publicado el proyecto</h3>
+            <p>
+              El sitio se despliega como aplicación estática servida por Nginx dentro de Docker.
+              El flujo está pensado para trabajar con GitHub, Dokploy y Cosmos como proxy principal.
+            </p>
+          </div>
+
+          <div class="deploy-flow" aria-label="Flujo de despliegue">
+            <div><strong>1</strong><span>GitHub</span><small>Repositorio del proyecto</small></div>
+            <div><strong>2</strong><span>Webhook</span><small>Notifica los cambios</small></div>
+            <div><strong>3</strong><span>Dokploy</span><small>Construye con Docker Compose</small></div>
+            <div><strong>4</strong><span>Nginx</span><small>Sirve la web estática</small></div>
+            <div><strong>5</strong><span>Cosmos</span><small>Proxy y dominio público</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Pie de pagina con creditos del proyecto. -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>Compilador Semántico · Proyecto web interactivo</p>
+      <p>Desarrollado por Gabriel Argenis Medina Carrero y Kevin Garcia · Docente: Álvaro Salamanca</p>
+    </div>
+  </footer>
+  <!-- Script principal: activa botones, analisis, pestanas y renderizado de resultados. -->
+  <script src="analyzer.js?v=1.5.7"></script>
+  <script>
+    (function () {
+      var embedded = window.self !== window.top;
+      if (embedded) {
+        document.documentElement.classList.add('sem-embedded');
+        document.documentElement.setAttribute('data-ova-embedded', 'true');
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        USB_OVA_THEME.init();
+
+        var statusBar = document.getElementById('semStatusBar');
+        var statusText = document.getElementById('semStatusText');
+        var verdict = document.getElementById('verdict');
+        var errorCount = document.getElementById('errorCount');
+
+        function syncStatusBar() {
+          if (!statusBar || !statusText || !verdict) return;
+          var errors = parseInt(errorCount?.textContent || '0', 10) || 0;
+          var text = verdict.textContent.trim();
+          statusText.textContent = text || 'Listo · escribe código o carga un ejemplo';
+          statusBar.classList.remove('status-ok', 'status-warn', 'status-err');
+          if (verdict.classList.contains('ok')) {
+            statusBar.classList.add('status-ok');
+          } else if (verdict.classList.contains('bad') || errors > 0) {
+            statusBar.classList.add('status-err');
+          } else if (text.toLowerCase().indexOf('escribe') !== -1 || text.toLowerCase().indexOf('carga') !== -1) {
+            statusBar.classList.add('status-warn');
+          } else {
+            statusBar.classList.add('status-ok');
+          }
+        }
+
+        if (verdict) {
+          new MutationObserver(syncStatusBar).observe(verdict, {
+            childList: true,
+            characterData: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['class']
+          });
+        }
+        if (errorCount) {
+          new MutationObserver(syncStatusBar).observe(errorCount, {
+            childList: true,
+            characterData: true,
+            subtree: true
+          });
+        }
+        syncStatusBar();
+      });
+    })();
+  </script>
+</body>
+</html>

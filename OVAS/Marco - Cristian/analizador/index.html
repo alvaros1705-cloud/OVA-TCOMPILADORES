@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es" class="ova-phase-lex">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador Léxico — Marco &amp; Cristian | USB</title>
+    <link rel="stylesheet" href="../../shared/usb-ova-tokens.css">
+    <link rel="stylesheet" href="../../shared/usb-ova-components.css">
+    <script src="../../shared/usb-ova-theme.js"></script>
+    <style>
+        /* Estilos específicos — categorías de tokens (semántica académica) */
+        :root,
+        html.usb-ova-root {
+            --keyword-bg: rgba(225, 29, 72, 0.14);
+            --keyword-color: #fb7185;
+            --keyword-border: #fb7185;
+            --number-bg: rgba(3, 105, 161, 0.16);
+            --number-color: #38bdf8;
+            --number-border: #38bdf8;
+            --identifier-bg: rgba(21, 128, 61, 0.16);
+            --identifier-color: #4ade80;
+            --identifier-border: #4ade80;
+            --operator-bg: rgba(126, 34, 206, 0.14);
+            --operator-color: #c084fc;
+            --operator-border: #c084fc;
+            --delimiter-bg: rgba(180, 83, 9, 0.14);
+            --delimiter-color: #fbbf24;
+            --delimiter-border: #fbbf24;
+            --error-bg: rgba(185, 28, 28, 0.14);
+            --error-color: #f87171;
+            --error-border: #f87171;
+        }
+
+        html.usb-ova-light {
+            --keyword-bg: #ffe4e6;
+            --keyword-color: #e11d48;
+            --keyword-border: #e11d48;
+            --number-bg: #e0f2fe;
+            --number-color: #0369a1;
+            --number-border: #0369a1;
+            --identifier-bg: #dcfce7;
+            --identifier-color: #15803d;
+            --identifier-border: #15803d;
+            --operator-bg: #f3e8ff;
+            --operator-color: #7e22ce;
+            --operator-border: #7e22ce;
+            --delimiter-bg: #fef3c7;
+            --delimiter-color: #b45309;
+            --delimiter-border: #b45309;
+            --error-bg: #fee2e2;
+            --error-color: #b91c1c;
+            --error-border: #b91c1c;
+        }
+
+        html, body { height: 100%; }
+
+        body.usb-ova-body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .lex-app-main {
+            flex: 1;
+            min-height: 0;
+            border-top: 1px solid var(--usb-border);
+        }
+
+        .lex-source-panel { border-right: 1px solid var(--usb-border); border-radius: 0; }
+        .lex-tokens-panel { border-radius: 0; }
+
+        .lex-panel-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            padding: 16px;
+            gap: 12px;
+        }
+
+        #inputCodigo {
+            width: 100%;
+            flex: 1;
+            min-height: 160px;
+            padding: 16px 18px;
+            border: 1px solid var(--usb-border);
+            border-radius: var(--usb-radius-md);
+            font-family: var(--usb-font-mono);
+            font-size: 0.875rem;
+            line-height: 1.65;
+            resize: none;
+            box-sizing: border-box;
+            outline: none;
+            background: var(--usb-bg);
+            color: var(--usb-text);
+            transition: border-color var(--usb-transition-fast), box-shadow var(--usb-transition-fast);
+        }
+
+        #inputCodigo:focus {
+            border-color: var(--phase-lex);
+            box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.15);
+        }
+
+        #inputCodigo::placeholder { color: var(--usb-text-subtle); }
+
+        .table-container {
+            flex: 1;
+            min-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--usb-border);
+            border-radius: var(--usb-radius-md);
+            background: var(--usb-bg);
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .lex-token-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 6px;
+        }
+
+        .lex-token-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: var(--usb-surface-elevated);
+            color: var(--usb-text-muted);
+            font-family: var(--usb-font-sans);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--usb-border);
+        }
+
+        .lex-token-table tbody td {
+            padding: 10px 14px;
+            font-size: 0.875rem;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .lex-token-table tr td:first-child {
+            border-top-left-radius: var(--usb-radius-md);
+            border-bottom-left-radius: var(--usb-radius-md);
+            border-left: 3px solid transparent;
+        }
+
+        .lex-token-table tr td:last-child {
+            border-top-right-radius: var(--usb-radius-md);
+            border-bottom-right-radius: var(--usb-radius-md);
+        }
+
+        .row-keyword { background: var(--keyword-bg); color: var(--keyword-color); }
+        .row-keyword td:first-child { border-left-color: var(--keyword-border); }
+        .row-keyword:hover td { box-shadow: 0 4px 12px rgba(225, 29, 72, 0.12); }
+
+        .row-number { background: var(--number-bg); color: var(--number-color); }
+        .row-number td:first-child { border-left-color: var(--number-border); }
+        .row-number:hover td { box-shadow: 0 4px 12px rgba(3, 105, 161, 0.12); }
+
+        .row-identifier { background: var(--identifier-bg); color: var(--identifier-color); }
+        .row-identifier td:first-child { border-left-color: var(--identifier-border); }
+        .row-identifier:hover td { box-shadow: 0 4px 12px rgba(21, 128, 61, 0.12); }
+
+        .row-operator { background: var(--operator-bg); color: var(--operator-color); }
+        .row-operator td:first-child { border-left-color: var(--operator-border); }
+        .row-operator:hover td { box-shadow: 0 4px 12px rgba(126, 34, 206, 0.12); }
+
+        .row-delimiter { background: var(--delimiter-bg); color: var(--delimiter-color); }
+        .row-delimiter td:first-child { border-left-color: var(--delimiter-border); }
+        .row-delimiter:hover td { box-shadow: 0 4px 12px rgba(180, 83, 9, 0.12); }
+
+        .row-error { background: var(--error-bg); color: var(--error-color); font-weight: 600; animation: lex-shake 0.4s ease; }
+        .row-error td:first-child { border-left-color: var(--error-border); }
+
+        .badge-text {
+            font-family: var(--usb-font-mono);
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+        }
+
+        .lex-token-table code {
+            font-family: var(--usb-font-mono);
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2px 8px;
+            border-radius: var(--usb-radius-sm);
+            font-size: 0.8125rem;
+        }
+
+        html.usb-ova-light .lex-token-table code {
+            background: rgba(255, 255, 255, 0.65);
+        }
+
+        .lex-empty-cell {
+            text-align: center;
+            padding: 48px 16px !important;
+            color: var(--usb-text-muted);
+            font-weight: 500;
+            background: transparent !important;
+            border-left: none !important;
+        }
+
+        @keyframes lex-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        @media (max-width: 768px) {
+            .lex-source-panel { border-right: none; border-bottom: 1px solid var(--usb-border); }
+        }
+    </style>
+</head>
+<body class="usb-ova-body ova-phase-lex">
+
+<header class="ova-header">
+    <div class="ova-header__brand">
+        <div class="ova-header__icon" aria-hidden="true">LEX</div>
+        <div class="ova-header__text">
+            <h1 class="ova-header__title">Analizador Léxico</h1>
+            <p class="ova-header__subtitle">Teoría de Compiladores · Detección de tokens en tiempo real</p>
+        </div>
+        <span class="ova-header__meta">Fase 1</span>
+    </div>
+</header>
+
+<div id="lex-status" class="ova-status-bar status-ok">
+    <span class="ova-status-bar__dot"></span>
+    Escribe código fuente para identificar tokens
+</div>
+
+<main class="lex-app-main ova-layout-split">
+
+    <section class="ova-panel lex-source-panel">
+        <div class="ova-panel__header">Código fuente</div>
+        <div class="ova-panel__body lex-panel-body">
+            <textarea id="inputCodigo" aria-label="Código fuente" placeholder="Prueba ingresando: if (total = 100.5) { return x; }"></textarea>
+        </div>
+    </section>
+
+    <section class="ova-panel lex-tokens-panel">
+        <div class="ova-panel__header">Tokens identificados</div>
+        <div class="ova-panel__body lex-panel-body">
+            <div class="table-container">
+                <table class="ova-table lex-token-table">
+                    <thead>
+                        <tr>
+                            <th>Componente</th>
+                            <th>Lexema</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaTokens">
+                        <tr>
+                            <td colspan="2" class="lex-empty-cell">Esperando código fuente...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    const TOKEN_RULES = [
+        { type: 'KEYWORD',    regex: /^(if|else|while|return)\b/ },
+        { type: 'NUMBER',     regex: /^\d+(\.\d+)?/ },
+        { type: 'IDENTIFIER', regex: /^[a-zA-Z_][a-zA-Z0-9_]*/ },
+        { type: 'OPERATOR',   regex: /^[+\-*/=]/ },
+        { type: 'DELIMITER',  regex: /^[(){};,]/ },
+        { type: 'SKIP',       regex: /^[ \t\n\r]+/ },
+        { type: 'MISMATCH',   regex: /^./ }
+    ];
+
+    const inputCodigo = document.getElementById('inputCodigo');
+    const tablaTokens = document.getElementById('tablaTokens');
+    const lexStatus = document.getElementById('lex-status');
+
+    const EMPTY_ROW = `<tr><td colspan="2" class="lex-empty-cell">Esperando código fuente...</td></tr>`;
+
+    function setLexStatus(message, type) {
+        if (!lexStatus) return;
+        lexStatus.className = 'ova-status-bar status-' + (type || 'ok');
+        lexStatus.innerHTML = `<span class="ova-status-bar__dot"></span> ${message}`;
+    }
+
+    inputCodigo.addEventListener('input', () => {
+        let codigo = inputCodigo.value;
+
+        if (codigo.trim() === "") {
+            tablaTokens.innerHTML = EMPTY_ROW;
+            setLexStatus('Escribe código fuente para identificar tokens', 'ok');
+            return;
+        }
+
+        let htmlResultado = "";
+        let posicion = 0;
+        let tokenCount = 0;
+
+        while (posicion < codigo.length) {
+            let substringActual = codigo.substring(posicion);
+            let coincidenciaEncontrada = false;
+
+            for (const rule of TOKEN_RULES) {
+                const match = substringActual.match(rule.regex);
+
+                if (match) {
+                    const valor = match[0];
+                    posicion += valor.length;
+                    coincidenciaEncontrada = true;
+
+                    if (rule.type === 'SKIP') break;
+
+                    if (rule.type === 'MISMATCH') {
+                        htmlResultado += `<tr class="row-error">
+                            <td><span class="badge-text">❌ ERROR</span></td>
+                            <td>Carácter inválido: '${valor}'</td>
+                        </tr>`;
+                        tokenCount++;
+                    } else {
+                        const rowClass = `row-${rule.type.toLowerCase()}`;
+                        htmlResultado += `<tr class="${rowClass}">
+                            <td><span class="badge-text">${rule.type}</span></td>
+                            <td><code>${escaparHTML(valor)}</code></td>
+                        </tr>`;
+                        tokenCount++;
+                    }
+                    break;
+                }
+            }
+        }
+
+        tablaTokens.innerHTML = htmlResultado;
+        setLexStatus(`${tokenCount} token${tokenCount === 1 ? '' : 's'} identificado${tokenCount === 1 ? '' : 's'}`, tokenCount > 0 ? 'ok' : 'ok');
+    });
+
+    function escaparHTML(string) {
+        return string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        USB_OVA_THEME.init();
+    });
+</script>
+
+</body>
+</html>

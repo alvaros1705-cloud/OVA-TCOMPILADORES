@@ -1,0 +1,1075 @@
+/*
+  styles.css — Compilador Semántico (Kevin & Gabriel)
+  Complementa OVAS/shared/usb-ova-*.css
+  Conserva clases usadas por analyzer.js; estilos académicos específicos.
+*/
+
+/* =========================================================
+   1. Alias semánticos → tokens USB
+   ========================================================= */
+:root,
+html.usb-ova-root {
+  --bg: var(--usb-bg);
+  --surface: var(--usb-surface);
+  --surface-strong: var(--usb-surface-elevated);
+  --text: var(--usb-text);
+  --muted: var(--usb-text-muted);
+  --line: var(--usb-border);
+  --primary: var(--phase-sem);
+  --primary-2: var(--usb-teal);
+  --accent: var(--phase-sem);
+  --good: var(--usb-success);
+  --bad: var(--usb-error);
+  --warning: var(--usb-warning);
+  --editor: #061633;
+  --editor-2: #071e49;
+  --shadow: var(--usb-shadow);
+  --usb-green: #006837;
+  --usb-green-dark: #004d28;
+  --radius: var(--usb-radius-xl);
+}
+
+html.usb-ova-light {
+  --editor: #0f172a;
+  --editor-2: #1e293b;
+}
+
+/* =========================================================
+   2. Reset y layout base
+   ========================================================= */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body.usb-ova-body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+button, textarea { font: inherit; }
+button { cursor: pointer; }
+code, pre { font-family: var(--usb-font-mono); }
+
+.container {
+  width: min(1360px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.card,
+.soft-card {
+  background: var(--surface);
+  backdrop-filter: var(--usb-blur);
+  -webkit-backdrop-filter: var(--usb-blur);
+  border: 1px solid var(--usb-border);
+  border-radius: var(--radius);
+  box-shadow: var(--usb-shadow-sm);
+}
+
+/* =========================================================
+   3. Header USB + navegación académica
+   ========================================================= */
+.sem-site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.sem-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.sem-brand-link .ova-header__text { min-width: 0; }
+
+.sem-main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.sem-nav-link {
+  padding: 8px 14px !important;
+  font-size: 0.8125rem !important;
+  text-decoration: none;
+}
+
+/* =========================================================
+   4. Secciones principales y hero
+   ========================================================= */
+.hero-section,
+.recognition-section,
+.demo-section,
+.docs-section,
+.about-section {
+  padding: 28px 0;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1.2fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.hero-copy,
+.flow-card,
+.doc-card,
+.recognition-grid {
+  padding: 28px;
+}
+
+.demo-shell.ova-panel {
+  border-radius: var(--usb-radius-lg);
+}
+
+.demo-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px !important;
+}
+
+.eyebrow {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.12);
+  color: var(--phase-sem);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-copy h1 {
+  font-size: clamp(2.4rem, 4vw, 4.2rem);
+  line-height: 1.03;
+  margin: 18px 0 14px;
+}
+
+.hero-copy h1 span {
+  background: linear-gradient(90deg, var(--phase-sem) 0%, var(--usb-teal) 55%, var(--usb-green) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-copy p,
+.phase-detail p,
+.recognition-copy p,
+.summary-card p,
+.doc-card p,
+.doc-list,
+.mini-feature p,
+.metric-card small {
+  color: var(--muted);
+  line-height: 1.72;
+}
+
+.hero-badges {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.info-pill {
+  padding: 16px 18px;
+  background: var(--usb-surface-elevated);
+  border: 1px solid var(--usb-border);
+  border-radius: var(--usb-radius-lg);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 72px;
+}
+
+.info-pill span { font-size: 1.1rem; }
+
+.section-topline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.section-topline h2,
+.recognition-copy h2,
+.doc-card h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.section-topline p { margin: 0; color: var(--muted); }
+
+/* =========================================================
+   5. Flujo visual de fases del compilador
+   ========================================================= */
+.phase-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  align-items: center;
+}
+
+.phase-arrow { display: none; }
+
+.phase-card,
+.phase-button {
+  width: 100%;
+  border: 1px solid var(--usb-border);
+  background: var(--surface-strong);
+  border-radius: var(--usb-radius-lg);
+  padding: 18px 12px;
+  min-height: 126px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text);
+  transition: transform var(--usb-transition-fast), box-shadow var(--usb-transition-fast), border-color var(--usb-transition-fast);
+}
+
+.phase-card:hover,
+.phase-card.active,
+.phase-button:hover,
+.phase-button.active {
+  transform: translateY(-2px);
+  box-shadow: var(--usb-shadow-sm);
+  border-color: rgba(22, 163, 74, 0.35);
+}
+
+.phase-card.highlight,
+.phase-card.active.highlight,
+.phase-card[data-phase="semantico"].active,
+.phase-button.highlight,
+.phase-button.active.highlight,
+.phase-button[data-phase="semantico"].active {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--phase-sem) 0%, var(--usb-teal) 100%);
+}
+
+.phase-card strong,
+.phase-button strong { font-size: 1.08rem; }
+
+.phase-card small,
+.phase-button small { color: inherit; opacity: 0.72; }
+
+.phase-icon { font-size: 1.7rem; line-height: 1; }
+
+.public-detail,
+.phase-detail {
+  margin-top: 18px;
+  padding: 20px 22px;
+  border: 1px solid var(--usb-border);
+  border-radius: var(--usb-radius-lg);
+  background: var(--usb-surface-elevated);
+}
+
+.public-detail h3,
+.phase-detail h4 {
+  margin: 10px 0 8px;
+  font-size: 1.45rem;
+}
+
+.phase-detail__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--phase-sem);
+  font-weight: 800;
+}
+
+.public-detail ul,
+.phase-detail ul {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.public-detail code,
+.code-pill,
+.chips span {
+  background: rgba(22, 163, 74, 0.08);
+  border: 1px solid var(--usb-border);
+  border-radius: var(--usb-radius-md);
+}
+
+/* =========================================================
+   6. Tarjetas de elementos reconocidos
+   ========================================================= */
+.recognition-grid {
+  display: grid;
+  grid-template-columns: 1.05fr repeat(4, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.recognition-copy { padding-right: 8px; }
+
+.mini-feature {
+  background: var(--usb-surface-elevated);
+  border: 1px solid var(--usb-border);
+  border-radius: var(--usb-radius-lg);
+  padding: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.mini-feature h3 { margin: 0 0 8px; font-size: 1.1rem; }
+
+.mini-feature__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--usb-radius-lg);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 900;
+  flex: 0 0 52px;
+}
+
+.violet { background: linear-gradient(135deg, var(--phase-sem), var(--usb-teal)); }
+.cyan { background: linear-gradient(135deg, #1590a6, #20bbd5); }
+.orange { background: linear-gradient(135deg, #ff7f1f, #ff9f3f); }
+.red { background: linear-gradient(135deg, #dd4d62, #f06464); }
+
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+.chips span,
+.code-pill {
+  display: inline-flex;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.chips-error span {
+  color: var(--bad);
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.code-pill { margin-top: 10px; }
+
+/* =========================================================
+   7. Demo interactiva: editor, botones y métricas
+   ========================================================= */
+.demo-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbar-group { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.demo-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2.6fr) minmax(300px, 0.95fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.editor-panel,
+.result-summary {
+  min-height: 0;
+}
+
+.editor-panel-body,
+.result-summary-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px !important;
+}
+
+.editor-frame {
+  position: relative;
+  flex: 1;
+  min-height: 320px;
+  background: linear-gradient(180deg, var(--editor) 0%, var(--editor-2) 100%);
+  border-radius: var(--usb-radius-lg);
+  padding: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 168, 150, 0.12);
+}
+
+#codeInput {
+  width: 100%;
+  min-height: 288px;
+  height: 100%;
+  border: 0;
+  resize: vertical;
+  background: transparent;
+  color: #f1f7ff;
+  font-family: var(--usb-font-mono);
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  outline: none;
+  tab-size: 2;
+}
+
+#codeInput:focus {
+  box-shadow: inset 0 0 0 1px var(--phase-sem);
+}
+
+#codeInput::placeholder { color: rgba(241, 247, 255, 0.48); }
+
+.result-summary-body { flex: 1; }
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.metric-card,
+.summary-card,
+.verdict {
+  border-radius: var(--usb-radius-lg);
+  border: 1px solid var(--usb-border);
+  background: var(--usb-surface-elevated);
+}
+
+.metric-card {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metric-card strong {
+  font-size: 2rem;
+  color: var(--phase-sem);
+  font-family: var(--usb-font-mono);
+}
+
+.metric-label { font-weight: 800; }
+
+.verdict {
+  padding: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.verdict.ok {
+  color: var(--good);
+  border-color: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.verdict.bad {
+  color: var(--bad);
+  border-color: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.summary-card { padding: 18px; }
+.summary-card h3 { margin: 0 0 10px; }
+
+/* =========================================================
+   8. Pestañas y paneles de resultados (analyzer.js)
+   ========================================================= */
+.demo-results {
+  border: 1px solid var(--usb-border);
+  border-radius: var(--usb-radius-md);
+  overflow: hidden;
+  background: var(--usb-bg);
+}
+
+.tabs.ova-tabs {
+  margin-top: 0;
+  border-radius: 0;
+}
+
+.tab.ova-tab.active {
+  color: var(--phase-sem);
+  background: rgba(22, 163, 74, 0.1);
+  border-color: rgba(22, 163, 74, 0.25);
+}
+
+.tab-panel.ova-tab-content {
+  margin-top: 0;
+  padding: 18px;
+  display: none;
+  min-height: 180px;
+}
+
+.tab-panel.active,
+.tab-panel.ova-tab-content.active {
+  display: block;
+}
+
+.empty {
+  padding: 18px;
+  border-radius: var(--usb-radius-md);
+  color: var(--muted);
+  background: var(--usb-surface-elevated);
+  border: 1px dashed var(--usb-border);
+}
+
+.error-list { display: grid; gap: 12px; }
+
+.error-item {
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.06);
+  border-radius: var(--usb-radius-md);
+  padding: 16px;
+}
+
+.error-title {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.error-kind,
+.badge {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.error-kind {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--bad);
+}
+
+.badge {
+  background: var(--usb-surface-elevated);
+  color: var(--muted);
+  border: 1px solid var(--usb-border);
+}
+
+.error-item small {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+/* Tabla generada por analyzer.js — estilo ova-table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--usb-border);
+  vertical-align: top;
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--usb-surface-elevated);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.table tbody td {
+  font-family: var(--usb-font-mono);
+  font-size: 0.78rem;
+}
+
+.table tr:last-child td { border-bottom: 0; }
+.table tbody tr:hover td { background: rgba(22, 163, 74, 0.04); }
+.table code { color: var(--phase-sem); }
+
+.code-box {
+  margin: 0;
+  overflow: auto;
+  padding: 18px;
+  border-radius: var(--usb-radius-lg);
+  color: #f5f7ff;
+  font-family: var(--usb-font-mono);
+  background: linear-gradient(180deg, var(--editor) 0%, var(--editor-2) 100%);
+  border: 1px solid rgba(0, 168, 150, 0.12);
+}
+
+.steps { display: grid; gap: 12px; }
+
+.step {
+  padding: 14px 16px;
+  border-radius: var(--usb-radius-md);
+  border: 1px solid var(--usb-border);
+  background: var(--usb-surface-elevated);
+}
+
+#semStatusBar.ova-panel__footer {
+  margin: 0;
+  border-top: 1px solid var(--usb-border);
+  border-radius: 0;
+}
+
+/* =========================================================
+   9. Documentación
+   ========================================================= */
+.docs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.doc-list {
+  margin: 14px 0 0;
+  padding-left: 20px;
+}
+
+.doc-list li { margin-bottom: 10px; }
+
+.doc-list code {
+  padding: 3px 8px;
+  border-radius: var(--usb-radius-sm);
+  background: rgba(22, 163, 74, 0.08);
+  border: 1px solid var(--usb-border);
+}
+
+/* =========================================================
+   10. Acerca de — branding USB académico
+   ========================================================= */
+.eyebrow--green {
+  background: rgba(0, 104, 55, 0.12);
+  color: var(--usb-green);
+}
+
+.about-shell {
+  padding: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+.about-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(22, 163, 74, 0.12), transparent 32%),
+    radial-gradient(circle at 92% 8%, rgba(0, 168, 150, 0.08), transparent 28%);
+}
+
+.about-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.about-header {
+  display: grid;
+  grid-template-columns: 1fr minmax(280px, 420px);
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.about-header h2 {
+  margin: 14px 0 10px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.05;
+}
+
+.about-header p,
+.creator-card p,
+.project-info-card p,
+.deployment-card p,
+.info-list dd,
+.deploy-flow small {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.institution-badge {
+  min-height: 142px;
+  padding: 22px;
+  border-radius: var(--usb-radius-xl);
+  color: var(--text);
+  background: var(--usb-surface-elevated);
+  border: 1px solid rgba(0, 104, 55, 0.2);
+  box-shadow: var(--usb-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.institution-badge--logo img {
+  width: min(100%, 360px);
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.institution-badge span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr 1.1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.creator-card,
+.project-info-card,
+.deployment-card {
+  border: 1px solid var(--usb-border);
+  background: var(--usb-surface-elevated);
+  border-radius: var(--usb-radius-xl);
+  box-shadow: var(--usb-shadow-sm);
+}
+
+.creator-card {
+  padding: 20px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.creator-card img {
+  width: 132px;
+  height: 132px;
+  border-radius: var(--usb-radius-xl);
+  object-fit: cover;
+  border: 4px solid var(--usb-bg);
+  box-shadow: var(--usb-shadow-sm);
+}
+
+.creator-card h3,
+.project-info-card h3,
+.deployment-card h3 {
+  margin: 8px 0;
+  font-size: 1.36rem;
+}
+
+.creator-role {
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(0, 104, 55, 0.12);
+  color: var(--usb-green);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.project-info-card { padding: 22px; }
+.project-info-card--why { grid-column: span 2; }
+
+.institution-logo-card {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: var(--usb-radius-lg);
+  background: var(--usb-surface);
+  border: 1px solid rgba(0, 104, 55, 0.16);
+}
+
+.institution-logo-card img {
+  display: block;
+  width: min(100%, 520px);
+  height: auto;
+  object-fit: contain;
+  margin-top: 14px;
+}
+
+.info-list {
+  margin: 14px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+.info-list div {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--usb-border);
+}
+
+.info-list div:last-child { border-bottom: 0; }
+.info-list dt { font-weight: 900; color: var(--text); }
+.info-list dd { margin: 0; }
+
+.deployment-card {
+  margin-top: 18px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 0.9fr 1.5fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.deploy-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.deploy-flow div {
+  min-height: 126px;
+  padding: 16px 12px;
+  border-radius: var(--usb-radius-lg);
+  background: var(--usb-surface);
+  border: 1px solid var(--usb-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.deploy-flow strong {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--usb-radius-md);
+  color: #fff;
+  background: var(--usb-grad-primary);
+}
+
+.deploy-flow span {
+  font-weight: 900;
+  color: var(--text);
+}
+
+/* =========================================================
+   11. Pie de página
+   ========================================================= */
+.site-footer { padding: 8px 0 28px; }
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   12. Tema claro — conserva legibilidad académica
+   ========================================================= */
+html.usb-ova-light .hero-copy h1 span {
+  background: linear-gradient(90deg, #15803d 0%, #0d9488 60%, #006837 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+html.usb-ova-light .info-pill,
+html.usb-ova-light .mini-feature,
+html.usb-ova-light .public-detail,
+html.usb-ova-light .phase-detail {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+html.usb-ova-light .institution-badge,
+html.usb-ova-light .creator-card,
+html.usb-ova-light .project-info-card,
+html.usb-ova-light .deployment-card {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* =========================================================
+   13. Modo iframe (portal USB)
+   ========================================================= */
+html.sem-embedded .hero-section {
+  padding: 12px 0 8px;
+}
+
+html.sem-embedded .hero-copy h1 {
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  margin: 10px 0;
+}
+
+html.sem-embedded .hero-copy p {
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+html.sem-embedded .hero-badges {
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+html.sem-embedded .info-pill {
+  min-height: auto;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+}
+
+html.sem-embedded .hero-copy,
+html.sem-embedded .flow-card,
+html.sem-embedded .doc-card,
+html.sem-embedded .recognition-grid {
+  padding: 16px;
+}
+
+html.sem-embedded .hero-grid {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+html.sem-embedded .recognition-section {
+  display: none;
+}
+
+html.sem-embedded .demo-section {
+  padding-top: 8px;
+}
+
+html.sem-embedded .sem-site-header {
+  padding: 10px 14px;
+}
+
+html.sem-embedded .sem-nav-link {
+  padding: 6px 10px !important;
+  font-size: 0.72rem !important;
+}
+
+html.sem-embedded .ova-header__title {
+  font-size: 1rem;
+}
+
+html.sem-embedded .ova-header__subtitle {
+  display: none;
+}
+
+html.sem-embedded .ova-header__meta {
+  font-size: 0.65rem;
+}
+
+html.sem-embedded .phase-flow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+html.sem-embedded .phase-card,
+html.sem-embedded .phase-button {
+  min-height: 88px;
+  padding: 12px 8px;
+}
+
+html.sem-embedded .phase-card strong,
+html.sem-embedded .phase-button strong {
+  font-size: 0.85rem;
+}
+
+html.sem-embedded .phase-icon {
+  font-size: 1.2rem;
+}
+
+html.sem-embedded .public-detail,
+html.sem-embedded .phase-detail {
+  padding: 14px 16px;
+}
+
+html.sem-embedded .public-detail h3,
+html.sem-embedded .phase-detail h4 {
+  font-size: 1.1rem;
+}
+
+html.sem-embedded .editor-frame {
+  min-height: 220px;
+}
+
+html.sem-embedded #codeInput {
+  min-height: 188px;
+}
+
+html.sem-embedded .docs-section,
+html.sem-embedded .about-section {
+  padding: 16px 0;
+}
+
+/* =========================================================
+   14. Responsive
+   ========================================================= */
+@media (max-width: 1180px) {
+  .hero-grid,
+  .recognition-grid,
+  .demo-layout,
+  .docs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recognition-grid { align-items: stretch; }
+  .phase-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .phase-card[data-phase="intermedio"],
+  .phase-button[data-phase="intermedio"] { grid-column: 1 / -1; }
+  .hero-badges { grid-template-columns: 1fr; }
+
+  .about-header,
+  .about-grid,
+  .deployment-card {
+    grid-template-columns: 1fr;
+  }
+
+  .project-info-card--why { grid-column: auto; }
+  .deploy-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 860px) {
+  .sem-site-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sem-main-nav {
+    justify-content: flex-start;
+    margin-left: 0 !important;
+  }
+
+  .phase-flow { grid-template-columns: 1fr; }
+  .phase-card[data-phase="intermedio"],
+  .phase-button[data-phase="intermedio"] { grid-column: auto; }
+
+  .hero-copy,
+  .flow-card,
+  .doc-card,
+  .recognition-grid {
+    padding: 20px;
+  }
+
+  .tabs { gap: 8px; }
+}
+
+@media (max-width: 640px) {
+  .container { width: min(100% - 20px, 1360px); }
+  .hero-copy h1 { font-size: 2.2rem; }
+  .demo-toolbar { flex-direction: column; }
+  .toolbar-group { width: 100%; }
+  .toolbar-group > * { flex: 1 1 100%; }
+  .metric-grid { grid-template-columns: 1fr; }
+
+  .about-shell { padding: 20px; }
+  .creator-card { flex-direction: column; align-items: flex-start; }
+  .creator-card img { width: 124px; height: 124px; }
+  .info-list div { grid-template-columns: 1fr; gap: 4px; }
+  .deploy-flow { grid-template-columns: 1fr; }
+}

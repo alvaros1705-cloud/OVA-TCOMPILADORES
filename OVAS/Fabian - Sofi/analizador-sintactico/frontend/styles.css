@@ -1,0 +1,499 @@
+:root {
+    --bg-color: #05070f;
+    --card-color: #0a0e1c;
+    --border-color: #1b264f;
+    --neon-green: #10b981;
+    --neon-blue: #3b82f6;
+    --neon-purple: #8b5cf6;
+    --neon-amber: #f59e0b;
+    --neon-red: #ef4444;
+    --glow-green: rgba(16, 185, 129, 0.15);
+    --glow-blue: rgba(59, 130, 246, 0.15);
+    --glow-purple: rgba(139, 92, 246, 0.15);
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(10, 14, 28, 0.5);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+    background: #1b264f;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+}
+
+.tab-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    color: #94a3b8;
+    border-radius: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+.tab-btn:hover {
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.03);
+}
+.tab-btn.active {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.05);
+}
+
+.layout-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    color: #64748b;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+.layout-btn:hover {
+    color: #cbd5e1;
+}
+.layout-btn.active {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.12);
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.08);
+}
+
+#monaco-container {
+    height: 100%;
+    width: 100%;
+    min-height: 80px;
+}
+
+@keyframes active-pulse {
+    0%, 100% {
+        background-color: rgba(59, 130, 246, 0.12);
+        box-shadow: inset 0 0 8px rgba(59, 130, 246, 0.1);
+    }
+    50% {
+        background-color: rgba(59, 130, 246, 0.25);
+        box-shadow: inset 0 0 15px rgba(59, 130, 246, 0.25);
+    }
+}
+.token-row-active {
+    animation: active-pulse 1.5s infinite ease-in-out;
+    color: #ffffff !important;
+}
+
+svg {
+    user-select: none;
+}
+
+.d3-link {
+    fill: none;
+    stroke: rgba(27, 38, 79, 0.6);
+    stroke-width: 1.5px;
+    transition: stroke 0.3s, stroke-width 0.3s;
+}
+.d3-link.highlighted {
+    stroke: var(--neon-blue);
+    stroke-width: 3px;
+    filter: drop-shadow(0 0 4px var(--neon-blue));
+}
+.d3-link.active-step {
+    stroke: var(--neon-green);
+    stroke-width: 3px;
+    filter: drop-shadow(0 0 6px var(--neon-green));
+}
+
+.d3-node {
+    cursor: pointer;
+}
+.d3-node circle {
+    stroke-width: 2px;
+    transition: r 0.3s, fill 0.3s, stroke 0.3s;
+}
+
+.d3-node-Program circle {
+    fill: #1e1b4b;
+    stroke: var(--neon-blue);
+    filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.3));
+}
+.d3-node-Assign circle {
+    fill: #1a103c;
+    stroke: var(--neon-purple);
+    filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.3));
+}
+.d3-node-BinOp circle {
+    fill: #3c1e10;
+    stroke: var(--neon-amber);
+    filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.3));
+}
+.d3-node-Variable circle {
+    fill: #064e3b;
+    stroke: var(--neon-green);
+    filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.3));
+}
+.d3-node-Number circle {
+    fill: #0f4c5c;
+    stroke: #2dd4bf;
+    filter: drop-shadow(0 0 4px rgba(45, 212, 191, 0.3));
+}
+
+.d3-node:hover circle {
+    r: 12px !important;
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
+.d3-node.highlighted circle {
+    r: 14px !important;
+    stroke-width: 3px;
+    stroke: #ffffff !important;
+    filter: drop-shadow(0 0 12px currentColor);
+}
+.d3-node.active-step circle {
+    r: 15px !important;
+    stroke-width: 4px;
+    stroke: #ffffff !important;
+    fill: var(--neon-green) !important;
+    filter: drop-shadow(0 0 15px var(--neon-green)) !important;
+}
+
+.d3-node text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    fill: #cbd5e1;
+    pointer-events: none;
+    transition: fill 0.3s, font-size 0.3s;
+}
+.d3-node text.shadow {
+    stroke: #05070f;
+    stroke-width: 3px;
+    stroke-linejoin: round;
+}
+.d3-node:hover text {
+    fill: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+}
+.d3-node.highlighted text {
+    fill: #ffffff;
+    font-weight: 700;
+}
+
+.node-tooltip {
+    position: absolute;
+    padding: 8px 12px;
+    background: #0a0e1c;
+    border: 1px solid #1b264f;
+    color: #cbd5e1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.btn-step:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.text-xxs {
+    font-size: 0.65rem;
+}
+.text-xs-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+}
+
+@keyframes node-pulse {
+    0%, 100% {
+        filter: drop-shadow(0 0 6px var(--neon-green));
+    }
+    50% {
+        filter: drop-shadow(0 0 18px var(--neon-green)) brightness(1.3);
+    }
+}
+.d3-node.active-step circle {
+    animation: node-pulse 0.8s infinite ease-in-out;
+}
+
+#tree-container svg {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#btn-step-play:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.token-row-active td {
+    background-color: rgba(59, 130, 246, 0.15) !important;
+    border-left: 2px solid #3b82f6;
+}
+
+/* =========================================================
+   USB Design System — Integración híbrida (Fase 9E)
+   Tailwind + Cyber + ova-phase-syn
+   ========================================================= */
+
+.syn-app {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header híbrido */
+.syn-header.ova-header {
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    padding: 14px 20px;
+    background: rgba(10, 14, 28, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(27, 38, 79, 0.55);
+}
+
+.syn-title-cyber {
+    background: linear-gradient(90deg, var(--phase-syn) 0%, #10b981 45%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.syn-api-badge {
+    flex-shrink: 0;
+}
+
+.syn-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.syn-select.ova-select {
+    min-width: 0;
+}
+
+.syn-btn-analyze {
+    gap: 6px;
+}
+
+/* Tabs híbridos: cyber + phase-syn */
+.syn-tabs.ova-tabs {
+    background: rgba(15, 23, 42, 0.65);
+    border-bottom-color: rgba(27, 38, 79, 0.45);
+}
+
+.tab-btn.ova-tab {
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.tab-btn.ova-tab.active {
+    color: var(--phase-syn);
+    background: rgba(2, 132, 199, 0.1);
+    border-color: rgba(2, 132, 199, 0.25);
+    box-shadow: 0 0 12px rgba(2, 132, 199, 0.08);
+}
+
+.tab-btn.active {
+    color: #10b981;
+}
+
+.tab-btn.ova-tab.active {
+    color: var(--phase-syn);
+}
+
+/* Tablas con ova-table en contexto cyber */
+.syn-cyber-panel .ova-table thead th {
+    color: #94a3b8;
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.syn-cyber-panel .ova-table tbody td {
+    color: #cbd5e1;
+}
+
+/* Modo iframe (portal USB) */
+html.syn-embedded .syn-header.ova-header {
+    padding: 10px 14px;
+}
+
+html.syn-embedded .ova-header__subtitle {
+    display: none;
+}
+
+html.syn-embedded .ova-header__meta {
+    font-size: 0.65rem;
+}
+
+html.syn-embedded .syn-header-actions {
+    gap: 8px;
+}
+
+html.syn-embedded .syn-select.ova-select {
+    width: auto !important;
+    max-width: 140px;
+    padding: 7px 28px 7px 10px;
+    font-size: 0.72rem;
+}
+
+html.syn-embedded .ova-btn-primary,
+html.syn-embedded .ova-btn-secondary {
+    padding: 7px 12px;
+    font-size: 0.78rem;
+}
+
+html.syn-embedded .syn-main {
+    padding: 12px;
+    gap: 12px;
+}
+
+html.syn-embedded .syn-editor-row {
+    min-height: 280px !important;
+    height: 34vh !important;
+}
+
+html.syn-embedded .syn-ast-section {
+    min-height: 140px;
+    padding: 12px;
+    flex: 2;
+}
+
+html.syn-embedded .syn-ast-section h2 {
+    font-size: 0.95rem;
+}
+
+html.syn-embedded #tree-container {
+    min-height: 180px !important;
+}
+
+/* Tema claro — overrides mínimos */
+html.usb-ova-light .syn-app {
+    background: var(--usb-bg) !important;
+    color: var(--usb-text);
+}
+
+html.usb-ova-light .syn-header.ova-header {
+    background: var(--usb-surface);
+    border-bottom-color: var(--usb-border);
+}
+
+html.usb-ova-light .syn-cyber-panel {
+    background: var(--usb-surface) !important;
+    border-color: var(--usb-border) !important;
+}
+
+html.usb-ova-light .syn-cyber-panel .bg-slate-900\/60,
+html.usb-ova-light .syn-cyber-panel .bg-slate-900\/90,
+html.usb-ova-light .syn-cyber-panel .bg-slate-900 {
+    background: var(--usb-surface-elevated) !important;
+}
+
+html.usb-ova-light .syn-tabs.ova-tabs {
+    background: var(--usb-surface-elevated);
+}
+
+html.usb-ova-light .text-slate-200,
+html.usb-ova-light .text-slate-300,
+html.usb-ova-light .text-slate-400 {
+    color: var(--usb-text-muted);
+}
+
+html.usb-ova-light .syn-cyber-panel .ova-table thead th {
+    color: var(--usb-text-muted);
+    background: var(--usb-surface-elevated);
+}
+
+html.usb-ova-light .syn-cyber-panel .ova-table tbody td {
+    color: var(--usb-text);
+}
+
+html.usb-ova-light #tac-code {
+    background: var(--usb-bg) !important;
+    color: var(--phase-syn) !important;
+    border-color: var(--usb-border) !important;
+}
+
+html.usb-ova-light #tree-container {
+    background: var(--usb-bg) !important;
+}
+
+html.usb-ova-light #tree-overlay-msg {
+    background: rgba(248, 250, 252, 0.92) !important;
+    color: var(--usb-text-muted) !important;
+}
+
+html.usb-ova-light .node-tooltip {
+    background: #ffffff;
+    border-color: var(--usb-border);
+    color: #334155;
+    box-shadow: var(--usb-shadow-sm);
+}
+
+html.usb-ova-light #monaco-container {
+    background: #f8fafc !important;
+}
+
+/* D3 — ajustes tema claro */
+html.usb-ova-light #tree-container.syn-d3-light .d3-link {
+    stroke: rgba(2, 132, 199, 0.35);
+}
+
+html.usb-ova-light #tree-container.syn-d3-light .d3-node text {
+    fill: #475569;
+}
+
+html.usb-ova-light #tree-container.syn-d3-light .d3-node text.shadow {
+    stroke: #f8fafc;
+}
+
+html.usb-ova-light #tree-container.syn-d3-light .d3-node-Program circle {
+    fill: #dbeafe;
+    stroke: var(--phase-syn);
+}
+
+html.usb-ova-light #tree-container.syn-d3-light .d3-node-Assign circle {
+    fill: #ede9fe;
+    stroke: #7c3aed;
+}
+
+html.usb-ova-light #tree-container.syn-d3-light .d3-node-BinOp circle {
+    fill: #ffedd5;
+    stroke: #ea580c;
+}
+
+html.usb-ova-light #tree-container.syn-d3-light .d3-node-Variable circle {
+    fill: #d1fae5;
+    stroke: #059669;
+}
+
+html.usb-ova-light #tree-container.syn-d3-light .d3-node-Number circle {
+    fill: #ccfbf1;
+    stroke: #0d9488;
+}
+
+@media (max-width: 900px) {
+    .syn-header-actions {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    html.syn-embedded .syn-select.ova-select {
+        max-width: none;
+        flex: 1 1 calc(50% - 8px);
+    }
+}
+

@@ -1,0 +1,13 @@
+# Despliegue API-only en Render.com (frontend en GitHub Pages)
+# Desarrollo local: uvicorn backend.main:app --reload --host 127.0.0.1 --port 8001
+services:
+  - type: web
+    name: analizador-sintactico
+    runtime: python
+    rootDir: .
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"

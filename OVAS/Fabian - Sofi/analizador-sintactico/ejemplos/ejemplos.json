@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "1. Asignación Simple",
+    "description": "Una asignación directa de un valor constante entero a una variable.",
+    "code": "x = 10;\n",
+    "category": "Válido"
+  },
+  {
+    "id": 2,
+    "name": "2. Expresión Aritmética Básica",
+    "description": "Evalúa la precedencia clásica de multiplicación sobre suma y resta.",
+    "code": "y = 5 + 3 * 2;\n",
+    "category": "Válido"
+  },
+  {
+    "id": 3,
+    "name": "3. Paréntesis Anidados",
+    "description": "Prueba cómo los paréntesis modifican la precedencia y asociatividad estándar.",
+    "code": "resultado = (4 + 2) * (10 / 5);\n",
+    "category": "Válido"
+  },
+  {
+    "id": 4,
+    "name": "4. Variables Múltiples y Dependencias",
+    "description": "Asigna múltiples variables y evalúa expresiones utilizando variables ya asignadas.",
+    "code": "base = 15;\naltura = 10;\narea = (base * altura) / 2;\n",
+    "category": "Válido"
+  },
+  {
+    "id": 5,
+    "name": "5. Operaciones con Decimales (Reales)",
+    "description": "Muestra cómo el lexer e intérprete inferirán tipos flotantes (Reales) en lugar de enteros.",
+    "code": "pi = 3.14159;\nradio = 5.0;\narea_circulo = pi * radio * radio;\n",
+    "category": "Válido"
+  },
+  {
+    "id": 6,
+    "name": "6. Expresión Libre sin Asignación",
+    "description": "La gramática permite sentencias de tipo expresión que terminen en punto y coma.",
+    "code": "5 * (2 + 3) / 2;\n",
+    "category": "Válido"
+  },
+  {
+    "id": 7,
+    "name": "7. Error Sintáctico: Falta Punto y Coma",
+    "description": "Falta el ';' delimitador al final de la asignación. El parser se sincronizará para detectar otros bloques.",
+    "code": "x = 5 + 3\ny = 10;\n",
+    "category": "Inválido (Sintáctico)"
+  },
+  {
+    "id": 8,
+    "name": "8. Error Sintáctico: Paréntesis Desbalanceados",
+    "description": "Un paréntesis de apertura sin cierre genera un error de factor inválido o fin inesperado.",
+    "code": "a = (10 + 5 * 2;\n",
+    "category": "Inválido (Sintáctico)"
+  },
+  {
+    "id": 9,
+    "name": "9. Error Semántico: Variable No Definida",
+    "description": "Utiliza la variable 'velocidad' antes de que haya sido declarada o asignada.",
+    "code": "tiempo = 5;\ndistancia = velocidad * tiempo;\n",
+    "category": "Inválido (Semántico)"
+  },
+  {
+    "id": 10,
+    "name": "10. Errores Semánticos: División por Cero",
+    "description": "Aunque es sintácticamente válido, el analizador semántico detectará una división por cero estática.",
+    "code": "divisor = 5 - 5;\ntasa = 100 / divisor;\n",
+    "category": "Inválido (Semántico)"
+  }
+]
