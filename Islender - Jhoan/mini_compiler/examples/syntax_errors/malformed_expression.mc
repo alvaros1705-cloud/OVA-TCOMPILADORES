@@ -1,2 +1,0 @@
-// Error sintáctico
-int x = ;
