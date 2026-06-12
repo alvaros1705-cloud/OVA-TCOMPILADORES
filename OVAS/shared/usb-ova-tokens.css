@@ -1,0 +1,136 @@
+/**
+ * USB OVA Design System — Tokens institucionales
+ * Universidad Simón Bolívar · Teoría de Compiladores
+ *
+ * Uso en OVA (fases posteriores):
+ *   <link rel="stylesheet" href="../../shared/usb-ova-tokens.css">
+ *   <link rel="stylesheet" href="../../shared/usb-ova-components.css">
+ *   <script src="../../shared/usb-ova-theme.js"></script>
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Tema oscuro (por defecto) ─────────────────────────────────────────── */
+:root,
+html.usb-ova-root {
+  /* Tipografía */
+  --usb-font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --usb-font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Institucional USB */
+  --usb-green: #006837;
+  --usb-green-hover: #004d28;
+  --usb-teal: #00a896;
+  --usb-teal-hover: #008f7f;
+  --usb-bg: #0b0d19;
+  --usb-surface: rgba(18, 22, 43, 0.85);
+  --usb-surface-elevated: rgba(22, 28, 52, 0.92);
+  --usb-border: rgba(0, 168, 150, 0.15);
+  --usb-border-strong: rgba(0, 104, 55, 0.35);
+  --usb-text: #f8fafc;
+  --usb-text-muted: #94a3b8;
+  --usb-text-subtle: #64748b;
+
+  /* Gradientes */
+  --usb-grad-primary: linear-gradient(135deg, var(--usb-green) 0%, var(--usb-teal) 100%);
+  --usb-grad-surface: linear-gradient(135deg, rgba(18, 22, 43, 0.95) 0%, rgba(15, 18, 32, 0.95) 100%);
+  --usb-grad-glow: radial-gradient(circle at 50% 0%, rgba(0, 168, 150, 0.08), transparent 55%);
+
+  /* Fases del compilador (acento por OVA) */
+  --phase-lex: #00a896;
+  --phase-syn: #0284c7;
+  --phase-sem: #16a34a;
+  --phase-tac: #ea580c;
+  --phase-aut: #db2777;
+  --ova-phase-accent: var(--usb-teal);
+
+  /* Estados semánticos */
+  --usb-success: #10b981;
+  --usb-warning: #f59e0b;
+  --usb-error: #ef4444;
+  --usb-info: #3b82f6;
+
+  /* API badge */
+  --ova-api-remote-bg: rgba(16, 185, 129, 0.1);
+  --ova-api-remote-border: rgba(16, 185, 129, 0.4);
+  --ova-api-remote-text: #6ee7b7;
+  --ova-api-local-bg: rgba(245, 158, 11, 0.1);
+  --ova-api-local-border: rgba(245, 158, 11, 0.4);
+  --ova-api-local-text: #fcd34d;
+  --ova-api-offline-bg: rgba(239, 68, 68, 0.1);
+  --ova-api-offline-border: rgba(239, 68, 68, 0.4);
+  --ova-api-offline-text: #fca5a5;
+
+  /* Radios y sombras */
+  --usb-radius-sm: 6px;
+  --usb-radius-md: 10px;
+  --usb-radius-lg: 14px;
+  --usb-radius-xl: 18px;
+  --usb-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --usb-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --usb-blur: blur(14px);
+
+  /* Transiciones */
+  --usb-transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --usb-transition-fast: 0.2s ease;
+
+  /* Compatibilidad alias (mapeo a tokens USB) */
+  --ova-bg: var(--usb-bg);
+  --ova-surface: var(--usb-surface);
+  --ova-border: var(--usb-border);
+  --ova-text: var(--usb-text);
+  --ova-text-muted: var(--usb-text-muted);
+  --ova-accent: var(--ova-phase-accent);
+}
+
+/* ── Tema claro (activado por usb-ova-theme.js) ────────────────────────── */
+html.usb-ova-light,
+html.usb-ova-light:root {
+  --usb-bg: #f8fafc;
+  --usb-surface: rgba(255, 255, 255, 0.88);
+  --usb-surface-elevated: rgba(255, 255, 255, 0.96);
+  --usb-border: rgba(0, 104, 55, 0.12);
+  --usb-border-strong: rgba(0, 168, 150, 0.25);
+  --usb-text: #0f172a;
+  --usb-text-muted: #475569;
+  --usb-text-subtle: #64748b;
+  --usb-grad-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
+  --usb-grad-glow: radial-gradient(circle at 50% 0%, rgba(0, 104, 55, 0.04), transparent 55%);
+  --usb-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+  --usb-shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+/* Base opcional al aplicar en body de la OVA */
+.usb-ova-body {
+  font-family: var(--usb-font-sans);
+  background-color: var(--usb-bg);
+  background-image: var(--usb-grad-glow);
+  color: var(--usb-text);
+  transition: background-color var(--usb-transition), color var(--usb-transition);
+}
+
+.usb-ova-body code,
+.usb-ova-body pre,
+.usb-ova-body .ova-mono {
+  font-family: var(--usb-font-mono);
+}
+
+/* Scrollbar unificado */
+.usb-ova-body ::-webkit-scrollbar,
+.ova-panel ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.usb-ova-body ::-webkit-scrollbar-track,
+.ova-panel ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.usb-ova-body ::-webkit-scrollbar-thumb,
+.ova-panel ::-webkit-scrollbar-thumb {
+  background: var(--usb-border-strong);
+  border-radius: 4px;
+}
+.usb-ova-body ::-webkit-scrollbar-thumb:hover,
+.ova-panel ::-webkit-scrollbar-thumb:hover {
+  background: var(--usb-teal);
+}
